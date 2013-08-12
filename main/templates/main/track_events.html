@@ -1,0 +1,80 @@
+{%extends 'main/base.html'%}
+{%load mytags%}
+
+{%block title%}Track Events{%endblock%}
+
+{%block content%}
+<h2>Events participated by {{request.user.get_full_name}}</h2>
+
+<a id='new-event-button' class='btn btn-success pull-right' href='#newEvent' data-toggle='modal' data-target='#newEvent' role='button'><span class='glyphicon glyphicon-plus'></span> Create New Event</a>
+<div id='newEvent' class="modal fade">
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>New Event</h3>
+			</div>
+			<div class='modal-body'>
+				<form id='event-form' method='post'>
+					{%csrf_token%}
+					{%load bootstrap%}
+					{{form|bootstrap}}
+				</form>
+			</div>
+			<div class='modal-footer'>
+				<a class='btn btn-danger' data-dismiss='modal'>Cancel</a>
+				<input class='btn btn-primary' type='submit' form='event-form'></input>
+			</div>
+		</div>
+	</div>
+</div>
+
+{%if events%}
+<table class='table table-hover sortable'>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Date</th>
+			<th>Organization</th>
+			<th>Hours</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for event in events%}
+		<tr class='{% if event|args:request.user|call:"status" == "User-created Event" or event|args:request.user|call:"status" == "Confirmed"%}success{%elif event|args:request.user|call:"status" == "Unconfirmed"%}warning{%endif%}'>
+			<td><a href="{{event.detail_url}}">{{event.name}}</a></td>
+			<td>{{event.date_start}}</td>
+			{% if event.has_org_url %}
+				<td><a href="{{event.organization.detail_url}}">{{event.getOrganization}}</a></td>
+			{%else%}
+				<td>{{event.getOrganization}}</td>
+			{%endif%}
+			<td>{{event.hours}}</td>
+			<td>{{event|args:request.user|call:"status"}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b>Total: </b>{{total_hours}}</td>
+			<th></th>
+		</tr>
+	</tfoot>
+</table>
+{%else%}
+No events found!
+{%endif%}
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+	$('#track-link').parent().addClass('active');
+});
+</script>
+<script src='/static/js/sorttable.js'></script>
+{%endblock%}

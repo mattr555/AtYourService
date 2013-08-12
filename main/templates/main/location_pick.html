@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% block title %}Set User Location{%endblock%}
+
+{% block content %}
+<h3>Set User Location</h3>
+<form action="#" method="post" id="location-form" class="form-inline">
+	{%csrf_token%}
+	<input type="text" class="form-control" style="width:300px" id="address-field" name="location"> Address, ZIP Code, or Town<br/>
+	<small>We will never share this information with others</small><br>
+	<a id="lookup-address" class="btn btn-primary btn-small" style="margin-top:10px; margin-bottom:10px">Lookup address</a>
+	<input type="hidden" id="lat-field" name="lat">
+	<input type="hidden" id="lon-field" name="lon">
+</form>
+<div id="map"></div><br>
+<input type="submit" form="location-form" class="btn btn-success disabled pull-right" id="submit-button" value="Save">
+{%endblock%}
+
+{%block scripts%}
+=<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
+<script src='/static/js/gmaps.js'></script>
+<script>
+$(document).ready(function(){
+	map = new GMaps({
+		div: '#map',
+		lat: 39.828,
+		lng: -98.57,
+		zoom: 4,
+	})
+
+	$('#lookup-address').on('click', function(){
+		GMaps.geocode({
+			address: $('#address-field').val(),
+			callback: function(results, status) {
+			    if (status === 'OK') {
+			      	var latlng = results[0].geometry.location
+			      	map.setCenter(latlng.lat(), latlng.lng())
+			      	map.setZoom(10)
+			      	map.addMarker({
+			        	lat: latlng.lat(),
+			        	lng: latlng.lng()
+			      	})
+			      	$('#submit-button').removeClass('disabled')
+			      	$('#lat-field').val(latlng.lat())
+			      	$('#lon-field').val(latlng.lng())
+			    }
+			}
+		})
+	})
+})
+</script>
+{%endblock%}

@@ -1,0 +1,59 @@
+{%extends 'main/base.html'%}
+
+{%block title%}Event details for {{event.name}}{%endblock%}
+
+{%block content%}
+<div class='row-fluid'>
+	<div class='col-lg-10'>
+		<h2>{{userevent.name}}</h2>
+		<h4>{{userevent.organization}}</h4>
+		{{userevent.date_start}} to {{userevent.date_end}}<br/>
+		User created event by {{userevent.user.get_full_name}}<br/>
+		<b>Hours: </b>{{userevent.hours}}<br/>
+		<b>Description: </b>{{userevent.description}}
+		<hr/>
+		<b>Location: </b>{{userevent.location}}<br/>
+		{%if userevent.geo_lat%}
+		<div id="map"></div>
+		{%endif%}
+	</div>
+	<div class='button-div' class='col-lg-2'>
+		<a id='delete-button' class='btn btn-danger'>Delete</a>
+	</div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<script src='/static/js/gmaps.js'></script>
+<script>
+$(document).ready(function(){
+	$('#browse-link').parent().addClass('active');
+
+	var login_link = "{%url 'main:login'%}";
+
+	{%if userevent.geo_lat%}
+
+	map = new GMaps({
+		div: '#map',
+		lat: {{userevent.geo_lat}},
+		lng: {{userevent.geo_lon}},
+		zoom: 12,
+	});
+
+	map.addMarker({
+		lat: {{userevent.geo_lat}},
+		lng: {{userevent.geo_lon}},
+		title: "{{userevent.location}}",
+	})
+	{%endif%}
+
+	$('.button-div').on('click', '#delete-button', function(){
+		var wantToDelete = confirm("Are you sure you want to delete this event?");
+		if (wantToDelete){
+			window.location = "delete?next={%url 'main:track'%}";
+		}
+	})
+})
+</script>
+
+{%endblock%}
