@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 
 from itertools import chain
 from operator import attrgetter
+from datetime import datetime
 
 from main.forms import MyUserCreate, UserEventCreate
 from main.models import Event, UserEvent, Organization
@@ -77,13 +78,20 @@ def list_events(request, page):
             pass
         else:
             v = request.GET.get(k)
-            filter_dict[k] = v
             if 'organization_id' in k:
                 filters["Organization: " + str(Organization.objects.get(pk=v).name)] = k + '=' + v
             elif 'organization__name' in k:
                 filters["Organization contains: " + v] = k + '=' + v
             elif 'name' in k:
                 filters["Name contains: " + v] = k + '=' + v
+            elif 'date' in k:
+                if k == 'date_start__gte':
+                    filters["Date after: " + v] = k + '=' + v
+                elif k == 'date_start__lte':
+                    filters["Date before: " + v] = k + '=' + v
+                raw_date = v.split('/')
+                v = datetime(int(raw_date[2]), int(raw_date[0]), int(raw_date[1]))
+            filter_dict[k] = v
         set = set.filter(**filter_dict)
 
     paginator = Paginator(set, 10, allow_empty_first_page=True)
