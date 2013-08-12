@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 
 from itertools import chain
 from operator import attrgetter
+from datetime import datetime
 
 from main.forms import MyUserCreate, UserEventCreate
 from main.models import Event, UserEvent, Organization
@@ -58,9 +59,14 @@ def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):
         if request.user.user_profile.geo_lat:
-            set = Event.objects.within(request.user.user_profile, int(request.GET.get('range')))
+            dist = request.GET.get('range')
+            set = Event.objects.within(request.user.user_profile, float(dist))
             set = set.filter(date_start__gte=timezone.now()).order_by('date_start')
-            filters['Search radius: ' + request.GET.get('range') + ' miles'] = 'range=' + request.GET.get('range')
+            if float(dist) == 1.0:
+                mi = ' mile'
+            else:
+                mi = ' miles'
+            filters['Search radius: ' + request.GET.get('range') + mi] = 'range=' + dist
         else:
             messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
                            extra_tags='safe')
@@ -72,13 +78,20 @@ def list_events(request, page):
             pass
         else:
             v = request.GET.get(k)
-            filter_dict[k] = v
             if 'organization_id' in k:
                 filters["Organization: " + str(Organization.objects.get(pk=v).name)] = k + '=' + v
             elif 'organization__name' in k:
                 filters["Organization contains: " + v] = k + '=' + v
             elif 'name' in k:
                 filters["Name contains: " + v] = k + '=' + v
+            elif 'date' in k:
+                if k == 'date_start__gte':
+                    filters["Date after: " + v] = k + '=' + v
+                elif k == 'date_start__lte':
+                    filters["Date before: " + v] = k + '=' + v
+                raw_date = v.split('/')
+                v = datetime(int(raw_date[2]), int(raw_date[0]), int(raw_date[1]))
+            filter_dict[k] = v
         set = set.filter(**filter_dict)
 
     paginator = Paginator(set, 10, allow_empty_first_page=True)
@@ -153,9 +166,6 @@ def delete_userevent(request, pk):
 def change_location(request):
     if request.method == "POST":
         p = request.user.user_profile
-        print(request.POST.get('location'))
-        print(request.POST.get('lat'))
-        print(request.POST.get('lon'))
         p.location = request.POST.get('location')
         p.geo_lat = request.POST.get('lat')
         p.geo_lon = request.POST.get('lon')

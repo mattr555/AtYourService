@@ -9,7 +9,6 @@ from math import sin, cos, acos, radians
 def distance(p1_lat, p1_long, p2_lat, p2_long):
         """ calculates the distance between p1 and p2 """
         multiplier = 3959  # for miles
-        print(p1_lat, p1_long, p2_lat, p2_long)
         if p1_lat and p1_long and p2_lat and p2_long:
             return (multiplier *
                 acos(
@@ -54,9 +53,9 @@ class Organization(models.Model):
 
 class EventManager(models.Manager):
     def within(self, location, distance):
-        subquery = 'distance(%(geo_lat)s,%(geo_lon)s,geo_lat,geo_lon) ' % location.__dict__
+        subquery = 'distance(%(geo_lat)s,%(geo_lon)s,main_event.geo_lat,main_event.geo_lon) ' % location.__dict__
         condition = 'proximity < %s' % distance
-        order = 'proximity'
+        order = 'date_end'
 
         return self.extra(select={'proximity':subquery},
                           where=[condition], order_by=[order])

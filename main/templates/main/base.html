@@ -23,7 +23,7 @@
 			<div class="nav-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li><a id="home-link" href="{%url 'main:home'%}">Home</a></li>
-					<li><a id="browse-link" href="{%url 'main:list_events'%}">Browse Events</a></li>
+					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse Events</a></li>
 					<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
 				</ul>
 				{%if request.user.id%}

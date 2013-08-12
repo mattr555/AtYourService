@@ -23,13 +23,11 @@
 				<ul class="dropdown-menu pull-right">
 					<li><a class='filter-link' data-filter='name__icontains'>Name</a></li>
 					<li><a class='filter-link' data-filter='organization__name__icontains'>Organization</a></li>
-					<li><a class='filter-link' data-filter='name__icontains'>wazzup</a></li>
-					<li><a class='filter-link' data-filter='name__icontains'>bonjour</a></li>
-					<li class="divider"></li>
-					<li class='dropdown-header'>Location:</li>
-					<li><input type="radio" name='dist'> Hai</li>
-					<li><input type="radio" name='dist'> Hallo</li>
-					<li><input type="radio" name='dist' checked> All</li>
+					<li><a class='filter-link' data-filter='range'>Search Radius</a></li>
+					<li class='divider'></li>
+					<li class='dropdown-header'>Date</li>
+					<li><a class='filter-link' data-filter='date_start__lte'>Date before</a></li>
+					<li><a class='filter-link' data-filter='date_start__gte'>Date after</a></li>
 				</ul>
 			</div>
 		</div>
@@ -73,8 +71,9 @@ $(document).ready(function(){
 	$('#browse-link').parent().addClass('active')
 
 	$('.remove-filter').on('click', function(){
-		var querystring = $(this).parent().data('querystring')
-		window.location = window.location.href.replace(querystring, '')
+		var querystring = encodeURI($(this).parent().data('querystring'))
+		alert(querystring)
+		window.location = window.location.href.replace('&' + querystring, '').replace(querystring, '')
 	})
 
 	$('.filter-link').on('click', function () {
