@@ -58,9 +58,14 @@ def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):
         if request.user.user_profile.geo_lat:
-            set = Event.objects.within(request.user.user_profile, int(request.GET.get('range')))
+            dist = request.GET.get('range')
+            set = Event.objects.within(request.user.user_profile, float(dist))
             set = set.filter(date_start__gte=timezone.now()).order_by('date_start')
-            filters['Search radius: ' + request.GET.get('range') + ' miles'] = 'range=' + request.GET.get('range')
+            if float(dist) == 1.0:
+                mi = ' mile'
+            else:
+                mi = ' miles'
+            filters['Search radius: ' + request.GET.get('range') + mi] = 'range=' + dist
         else:
             messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
                            extra_tags='safe')
@@ -153,9 +158,6 @@ def delete_userevent(request, pk):
 def change_location(request):
     if request.method == "POST":
         p = request.user.user_profile
-        print(request.POST.get('location'))
-        print(request.POST.get('lat'))
-        print(request.POST.get('lon'))
         p.location = request.POST.get('location')
         p.geo_lat = request.POST.get('lat')
         p.geo_lon = request.POST.get('lon')

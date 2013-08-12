@@ -23,13 +23,8 @@
 				<ul class="dropdown-menu pull-right">
 					<li><a class='filter-link' data-filter='name__icontains'>Name</a></li>
 					<li><a class='filter-link' data-filter='organization__name__icontains'>Organization</a></li>
-					<li><a class='filter-link' data-filter='name__icontains'>wazzup</a></li>
+					<li><a class='filter-link' data-filter='range'>Search Radius</a></li>
 					<li><a class='filter-link' data-filter='name__icontains'>bonjour</a></li>
-					<li class="divider"></li>
-					<li class='dropdown-header'>Location:</li>
-					<li><input type="radio" name='dist'> Hai</li>
-					<li><input type="radio" name='dist'> Hallo</li>
-					<li><input type="radio" name='dist' checked> All</li>
 				</ul>
 			</div>
 		</div>
@@ -74,7 +69,7 @@ $(document).ready(function(){
 
 	$('.remove-filter').on('click', function(){
 		var querystring = $(this).parent().data('querystring')
-		window.location = window.location.href.replace(querystring, '')
+		window.location = window.location.href.replace('&' + querystring, '').replace(querystring, '')
 	})
 
 	$('.filter-link').on('click', function () {
