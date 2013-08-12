@@ -30,6 +30,11 @@ urlpatterns = patterns('',
         'django.contrib.auth.views.password_reset_confirm',
         {'post_reset_redirect' : '/profile/reset_pass/complete/',
          'template_name': 'myregistration/password_reset_confirm.html'}),
+    url(r'^profile/change_pass/$',
+        'django.contrib.auth.views.password_change',
+        {'template_name': 'myregistration/password_change.html',
+         'post_change_redirect': '/profile/change_pass/complete/'},
+        name='change_password'),
 
     url(r'^', include('main.urls', namespace='main')),
 )
