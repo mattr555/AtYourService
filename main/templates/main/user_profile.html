@@ -1,3 +1,10 @@
 {%extends 'main/base.html'%}
 
 {% block title %}Account Settings{% endblock title %}
+
+{% block content %}
+	<h2>User account details for {{request.user.get_full_name}}</h2><br>
+	<b>Username: </b>{{request.user.username}}<br>
+	<a href="{% url 'main:change_password' %}">Change password</a><hr>
+	<b>Location: </b>{{request.user.user_profile.location}} <a href="{% url 'main:change_loc'%}">Change</a>
+{% endblock content %}

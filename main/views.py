@@ -178,3 +178,6 @@ def change_location(request):
 
 def user_profile(request):
     return render(request, 'main/user_profile.html')
+
+def change_password(request):
+    pass
