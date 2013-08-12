@@ -175,3 +175,6 @@ def change_location(request):
             return HttpResponseRedirect(request.GET.get('next'))
         return HttpResponseRedirect('/')  # should be profile detail
     return render(request, 'main/location_pick.html')
+
+def user_profile(request):
+    return render(request, 'main/user_profile.html')
