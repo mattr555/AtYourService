@@ -1,0 +1,9 @@
+What should happen before a 1.0 release:
+
+	User account manipulation
+	Confirmation of user attendance
+	Organization manipulation
+	Adding events defined by organization
+
+	Django admin page
+	Test suite
