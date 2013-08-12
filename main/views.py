@@ -173,11 +173,13 @@ def change_location(request):
         messages.info(request, 'Location successfully added')
         if request.GET.get('next'):
             return HttpResponseRedirect(request.GET.get('next'))
-        return HttpResponseRedirect('/')  # should be profile detail
+        return HttpResponseRedirect(reverse('main:user_profile'))  # should be profile detail
     return render(request, 'main/location_pick.html')
 
+@login_required
 def user_profile(request):
     return render(request, 'main/user_profile.html')
 
-def change_password(request):
-    pass
+def finish_change_pass(request):
+    messages.success(request, 'Password reset successfully')
+    return HttpResponseRedirect('/')

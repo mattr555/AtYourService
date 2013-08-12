@@ -32,8 +32,6 @@ class MyUserCreate(UserCreationForm):
     def clean_org_admin(self):
         vol = self.cleaned_data.get('volunteer')
         org = self.cleaned_data.get('org_admin')
-        print(vol)
-        print(org)
         if (not vol) and (not org):
             raise forms.ValidationError('A checkbox is required')
 
