@@ -156,3 +156,4 @@ LOGIN_URL = '/login/'
 MESSAGE_TAGS = {messages.ERROR: 'alert-danger',
                 messages.INFO: 'alert-info',
                 messages.SUCCESS: 'alert-success', }
+
