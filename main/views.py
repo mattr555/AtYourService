@@ -55,6 +55,7 @@ def signup(request):
 def list_events_one(request):
     return list_events(request, 1)
 
+@login_required
 def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):
@@ -173,5 +174,13 @@ def change_location(request):
         messages.info(request, 'Location successfully added')
         if request.GET.get('next'):
             return HttpResponseRedirect(request.GET.get('next'))
-        return HttpResponseRedirect('/')  # should be profile detail
+        return HttpResponseRedirect(reverse('main:user_profile'))  # should be profile detail
     return render(request, 'main/location_pick.html')
+
+@login_required
+def user_profile(request):
+    return render(request, 'main/user_profile.html')
+
+def finish_change_pass(request):
+    messages.success(request, 'Password reset successfully')
+    return HttpResponseRedirect('/')

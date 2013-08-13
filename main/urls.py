@@ -14,5 +14,8 @@ urlpatterns = patterns('',
     url(r'^organization/(?P<pk>\d+)/', views.organization_detail, name='organization_detail'),
     url(r'^track/', views.track_events, name='track'),
     url(r'^profile/change_loc/$', views.change_location, name='change_loc'),
+    url(r'^profile/reset_pass/complete/$', views.finish_change_pass),
+    url(r'^profile/change_pass/complete/$', views.finish_change_pass),
+    url(r'^profile/$', views.user_profile, name='user_profile'),
     url(r'^$', views.home, name='home'),
 )

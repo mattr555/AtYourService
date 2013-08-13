@@ -51,7 +51,7 @@
     <div class="container">
 
       {% if error_message %}
-      <div class="alert alert-error fade in">
+      <div class="alert alert-danger">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         <h4 class="alert-heading">Oh Noes!</h4>
         <p>{{error_message}}</p>
@@ -63,6 +63,7 @@
         <h2 class="form-signin-heading">Please login</h2>
         <input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="uname" id="uname">
         <input type="password" class="input-block-level form-control" placeholder="Password" name="pword" id="pword">
+        <a href="{%url 'reset_password'%}">Forgot password?</a><br>
         <button class="btn btn-large btn-primary" type="submit">Login</button>
       </form>
 

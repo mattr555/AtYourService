@@ -4,16 +4,13 @@ try:
 except:
     pass
 import os
-from AtYourService.dev_settings import *
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+if DEBUG:
+    from AtYourService.dev_settings import *
+
 from django.contrib import messages
-
-ADMINS = (
-    ('Matthew Ramina', 'splattkid@gmail.com'),
-)
-
-MANAGERS = ADMINS
-
-
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
