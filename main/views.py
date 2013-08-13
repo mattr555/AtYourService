@@ -55,6 +55,7 @@ def signup(request):
 def list_events_one(request):
     return list_events(request, 1)
 
+@login_required
 def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):

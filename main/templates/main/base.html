@@ -29,7 +29,7 @@
 				{%if request.user.id%}
 					<p class="pull-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
 				{%else%}
-					<p class="pull-right navbar-text">Not logged in. <a class="navbar-link" href="{%url 'main:login'%}?next={{request.get_full_path}}">Login</a></p>
+					<p class="pull-right navbar-text">Not logged in. <a href="{%url 'main:login'%}?next={{request.get_full_path}}">Login</a></p>
 				{%endif%}
 			</div><!--/.nav-collapse -->
 		</div>
