@@ -1,10 +1,21 @@
-What should happen before a 1.0 release:
-
-	[X] User account manipulation
+What should happen before a 0.1 release:
 	Email confirmation
+	Email notification
+		Celery + django-mailer
 	Confirmation of user attendance
 	Organization manipulation
 	Adding events defined by organization
 
+What should happen before a 0.9 (closed beta) release:
 	Django admin page
+
+What should happen before a 1.0 release:
 	Test suite
+	Sexier, not as bootstrappy UI
+	Better mobile UI
+
+Other, low priority ideas (1.1/2.0):
+	Integration with GCal/todo app
+
+Done:
+	User account manipulation
