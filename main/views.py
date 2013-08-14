@@ -71,6 +71,7 @@ def list_events(request, page):
         else:
             messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
                            extra_tags='safe')
+            set = Event.objects.filter(date_start__gte=timezone.now()).order_by('date_start')
     else:
         set = Event.objects.filter(date_start__gte=timezone.now()).order_by('date_start')
 

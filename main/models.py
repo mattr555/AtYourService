@@ -7,7 +7,7 @@ from geopy import geocoders
 from math import sin, cos, acos, radians
 
 def distance(p1_lat, p1_long, p2_lat, p2_long):
-        """ calculates the distance between p1 and p2 """
+        # calculates the distance between p1 and p2
         multiplier = 3959  # for miles
         if p1_lat and p1_long and p2_lat and p2_long:
             return (multiplier *
@@ -24,7 +24,7 @@ from django.db.backends.signals import connection_created
 
 @receiver(connection_created)
 def setup_proximity_func(connection, **kwargs):
-    """ add the proximity function to sqlite """
+    # add the proximity function to sqlite
     connection.connection.create_function("distance", 4, distance)
 
 class Organization(models.Model):
@@ -56,9 +56,9 @@ class EventManager(models.Manager):
         subquery = 'distance(%(geo_lat)s,%(geo_lon)s,main_event.geo_lat,main_event.geo_lon) ' % location.__dict__
         condition = 'proximity < %s' % distance
         order = 'date_end'
-
-        return self.extra(select={'proximity':subquery},
+        query = self.extra(select={'proximity':subquery},
                           where=[condition], order_by=[order])
+        return query
 
 class Event(models.Model):
     def __str__(self):
