@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'ajax',
     'widget_tweaks',
     'bootstrapform',
+    'mailer',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -157,3 +158,4 @@ MESSAGE_TAGS = {messages.ERROR: 'alert-danger',
                 messages.INFO: 'alert-info',
                 messages.SUCCESS: 'alert-success', }
 
+SITE_ID = 1
