@@ -108,7 +108,6 @@ INSTALLED_APPS = (
     'ajax',
     'widget_tweaks',
     'bootstrapform',
-    'mailer',
 )
 
 # A sample logging configuration. The only tangible logging
