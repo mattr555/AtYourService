@@ -1,7 +1,5 @@
 What should happen before a 0.1 release:
-	Email confirmation
-	Email notification
-		Celery + django-mailer
+	Email validation
 	Confirmation of user attendance
 	Organization manipulation
 	Adding events defined by organization
@@ -19,3 +17,5 @@ Other, low priority ideas (1.1/2.0):
 
 Done:
 	User account manipulation
+	Email notification
+		cron + django.core.mail
