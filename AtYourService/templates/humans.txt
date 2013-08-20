@@ -30,6 +30,10 @@
 	JS Minifier
 	closure-compiler.appspot.com/home
 
+	Font Awesome
+	Icons & Glyphs
+	fortawesome.github.io/Font-Awesome
+
 /* SITE */
 	
 	Last Update: 2013/07/27
