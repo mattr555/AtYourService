@@ -5,8 +5,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>{%block title%}{%endblock%}</title>
-	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/static/css/bootstrap-glyphicons.css">
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/css/AtYourService.css">
 	{%block style%}{%endblock%}
 	<link rel="author" href="/humans.txt"/>
@@ -14,13 +13,15 @@
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="{%url 'main:home'%}">AtYourService</a>
-			<div class="nav-collapse collapse">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="{%url 'main:home'%}">AtYourService</a>
+			</div>
+			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li><a id="home-link" href="{%url 'main:home'%}">Home</a></li>
 					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse Events</a></li>
@@ -33,7 +34,6 @@
 				{%endif%}
 			</div><!--/.nav-collapse -->
 		</div>
-
 	</div>
 
 	<div id="content" class="container">
@@ -57,7 +57,7 @@
 	</div>
 	<!-- scripts -->
 	<script src="//code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" type="text/javascript"></script>
 	<script src="/static/js/AjaxCSRF.js"></script>
 	<script>
 		$(document).ready(function(){
