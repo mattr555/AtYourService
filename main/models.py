@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from geopy import geocoders
@@ -163,6 +163,10 @@ class UserProfile(models.Model):
             self.geo_lon = lon
         except:
             pass
+
+    def is_org_admin(self):
+        group = Group.objects.get(name="Org_Admin")
+        return group in self.user.groups.all()
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)

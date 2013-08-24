@@ -27,6 +27,9 @@
 					<li><a id="home-link" href="{%url 'main:home'%}">Home</a></li>
 					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse Events</a></li>
 					<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+					{% if user.user_profile.is_org_admin %}
+						<li><a id="admin-link" {# href="{%url 'main:org_admin'%}" #}>Administrate Organization</a></li>
+					{%endif%}
 				</ul>
 				{%if request.user.id%}
 					<p class="pull-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
