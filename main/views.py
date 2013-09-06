@@ -114,7 +114,7 @@ class EventView(generic.DetailView):
 
 def organization_detail(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
-    recent_events = o.events.filter(date_start__gte=timezone.now()).order_by('date_start')[:5]
+    recent_events = list(o.events.filter(date_start__gte=timezone.now()).order_by('date_start')[:5])
     return render(request, 'main/organization_detail.html', {'organization': o, 'recent_events': recent_events})
 
 @login_required
@@ -127,8 +127,8 @@ def userevent_detail(request, pk):
 
 @login_required
 def track_events(request):
-    event = request.user.events.all()
-    user_event = request.user.user_events.all()
+    event = list(request.user.events.all())
+    user_event = list(request.user.user_events.all())
     event_set = sorted(chain(event, user_event),
                        key=attrgetter('date_end'))
     total_hours = 0
