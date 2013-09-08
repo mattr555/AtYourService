@@ -166,20 +166,12 @@ class UserProfile(models.Model):
             pass
 
     def is_org_admin(self):
-        result = cache.get('user_' + self.id + '_org_admin')
-        if result is None:
-            group = Group.objects.get(name="Org_Admin")
-            result = group in self.user.groups.all()
-            cache.set('user_' + self.id + '_org_admin', result)
-        return result
+        group = Group.objects.get(name="Org_Admin")
+        return group in self.user.groups.all()
 
     def is_volunteer(self):
-        result = cache.get('user_' + self.id + '_volunteer')
-        if result is None:
-            group = Group.objects.get(name="Volunteer")
-            result = group in self.user.groups.all()
-            cache.set('user_' + self.id + '_volunteer', result)
-        return result
+        group = Group.objects.get(name="Volunteer")
+        return group in self.user.groups.all()
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)
