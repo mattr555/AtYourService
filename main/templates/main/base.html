@@ -1,4 +1,5 @@
 {%load mytags%}
+{%load cache%}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,8 @@
 	<link rel="author" href="/humans.txt"/>
 </head>
 <body>
+	{% cache 60 navbar request.user.username %}
+	{# make cache length longer in production #}
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -24,11 +27,12 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a id="home-link" href="{%url 'main:home'%}">Home</a></li>
-					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse Events</a></li>
-					<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse</a></li>
+					{% if user.user_profile.is_volunteer %}
+						<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+					{%endif%}
 					{% if user.user_profile.is_org_admin %}
-						<li><a id="admin-link" {# href="{%url 'main:org_admin'%}" #}>Administrate Organization</a></li>
+						<li><a id="admin-link" {# href="{%url 'main:org_admin'%}" #}>Manage Organization</a></li>
 					{%endif%}
 				</ul>
 				{%if request.user.id%}
@@ -39,6 +43,7 @@
 			</div><!--/.nav-collapse -->
 		</div>
 	</div>
+	{%endcache%}
 
 	<div id="content" class="container">
 		{% if messages %}

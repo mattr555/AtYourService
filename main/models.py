@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from geopy import geocoders
 
 from math import sin, cos, acos, radians
@@ -165,8 +166,20 @@ class UserProfile(models.Model):
             pass
 
     def is_org_admin(self):
-        group = Group.objects.get(name="Org_Admin")
-        return group in self.user.groups.all()
+        result = cache.get('user_' + self.id + '_org_admin')
+        if result is None:
+            group = Group.objects.get(name="Org_Admin")
+            result = group in self.user.groups.all()
+            cache.set('user_' + self.id + '_org_admin', result)
+        return result
+
+    def is_volunteer(self):
+        result = cache.get('user_' + self.id + '_volunteer')
+        if result is None:
+            group = Group.objects.get(name="Volunteer")
+            result = group in self.user.groups.all()
+            cache.set('user_' + self.id + '_volunteer', result)
+        return result
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)
