@@ -129,3 +129,5 @@ MESSAGE_TAGS = {messages.ERROR: 'alert-danger',
                 messages.SUCCESS: 'alert-success', }
 
 SITE_ID = 1
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
