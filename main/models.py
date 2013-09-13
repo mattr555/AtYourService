@@ -44,6 +44,12 @@ class Organization(models.Model):
         except:
             pass
 
+    def member_count(self):
+        return len(self.members.all())
+
+    def event_count(self):
+        return len(self.events.all())
+
     admin = models.ForeignKey(User, related_name='orgs_admin')
     members = models.ManyToManyField(User, related_name='organizations')
     name = models.CharField(max_length=300, db_index=True)

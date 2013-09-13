@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from main import views, user_views
+from main import views, user_views, org_views
 
 urlpatterns = patterns('',
     # user management
@@ -10,6 +10,9 @@ urlpatterns = patterns('',
     url(r'^profile/reset_pass/complete/$', user_views.finish_change_pass),
     url(r'^profile/change_pass/complete/$', user_views.finish_change_pass),
     url(r'^profile/$', user_views.user_profile, name='user_profile'),
+
+    # organization management
+    url(r'^manage/$', org_views.org_manage, name='org_manage'),
 
     url(r'^list/(?P<page>\d+)/', views.list_events, name='list_page'),
     url(r'^list/$', views.list_events_one, name='list_events'),

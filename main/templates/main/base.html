@@ -32,7 +32,7 @@
 						<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
 					{%endif%}
 					{% if user.user_profile.is_org_admin %}
-						<li><a id="admin-link" {# href="{%url 'main:org_admin'%}" #}>Manage Organization</a></li>
+						<li><a id="admin-link" href="{%url 'main:org_manage'%}">Manage Organization</a></li>
 					{%endif%}
 				</ul>
 				{%if request.user.id%}
