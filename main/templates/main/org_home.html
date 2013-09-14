@@ -24,9 +24,9 @@
 				<td>{{e.name}}</td>
 				<td>{{e.date_start}}</td>
 				<td>{{e.participant_count}}</td>
-				<td><a {# href="{%url 'main:event_edit' e.id%}" #} class="btn btn-primary btn-xs" style="margin-right:5px">
+				<td><a href="{%url 'main:event_edit' e.id%}" class="btn btn-primary btn-xs" style="margin-right:5px">
 					<i class="icon-pencil"></i> Edit
-				</a><a {# href="{%url 'main:event_delete' e.id%}" #} class="btn btn-danger btn-xs">
+				</a><a class="btn btn-danger btn-xs event-delete" data-eventid="{{e.id}}">
 					Delete
 				</a></td>
 				<td></td>
@@ -42,4 +42,14 @@
 
 {% block scripts %}
 <script src='//cdn.jsdelivr.net/sorttable/2/sorttable.min.js'></script>
+<script>
+	$(document).ready(function(){
+		$('.event-delete').on('click', function(){
+			var wantToDelete = confirm("Are you sure you want to delete this event? This action cannot be undone.");
+			if (wantToDelete){
+				window.location = "../../event/" + $(this).data('eventid') + "/delete?next={%url 'main:manage_home'%}";
+			}
+		})
+	})
+</script>
 {% endblock scripts %}

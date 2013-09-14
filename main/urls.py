@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^manage/org/new/$', org_views.org_new, name='org_create'),
     url(r'^manage/org/(?P<pk>\d+)/delete/$', org_views.org_delete, name='org_delete'),
     url(r'^manage/event/new/$', org_views.event_new, name='event_create'),
+    url(r'^manage/event/(?P<pk>\d+)/edit/$', org_views.event_edit, name='event_edit'),
+    url(r'^manage/event/(?P<pk>\d+)/delete/$', org_views.event_delete, name='event_delete'),
 
     url(r'^list/(?P<page>\d+)/', views.list_events, name='list_page'),
     url(r'^list/$', views.list_events_one, name='list_events'),

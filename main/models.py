@@ -3,9 +3,10 @@ from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
-from geopy import geocoders
 
+from geopy import geocoders
 from math import sin, cos, acos, radians
+import datetime
 
 def distance(p1_lat, p1_long, p2_lat, p2_long):
         # calculates the distance between p1 and p2
@@ -103,7 +104,13 @@ class Event(models.Model):
             pass
 
     def participant_count(self):
-        return int(len(self.participants))
+        return len(self.participants.all())
+
+    def date_start_input(self):
+        return datetime.datetime.strftime(self.date_start, '%m/%d/%y %I:%M %p')
+
+    def date_end_input(self):
+        return datetime.datetime.strftime(self.date_end, '%m/%d/%y %I:%M %p')
 
     has_org_url = True
     objects = EventManager()

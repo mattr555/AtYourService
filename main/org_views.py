@@ -142,3 +142,33 @@ def event_new(request):
         messages.success(request, 'Event created successfully')
         return HttpResponseRedirect(reverse('main:org_home', args=(request.POST.get('organization'))))
 
+@login_required
+def event_edit(request, pk):
+    e = get_object_or_404(Event.objects, pk=pk)
+    if not request.user == e.organizer:
+        messages.error(request, "You aren't authorized to do that!")
+        return HttpResponseRedirect(reverse('main:manage_home'))
+    if request.method == "GET":
+        return render(request, 'main/event_edit.html', {'event': e})
+    else:
+        err = validate_event(request, e)
+        if isinstance(err, tuple):
+            return render(request, 'main/event_edit.html', {'event': err[1], 'errors': err[0]})
+        messages.success(request, 'Event created successfully')
+        return HttpResponseRedirect(reverse('main:org_home', args=(request.POST.get('organization'))))
+
+@login_required
+def event_delete(request, pk):
+    e = Event.objects.get(pk=pk)
+    if e:
+        if request.user == e.organizer:
+            e.delete()
+            messages.info(request, "Event successfully deleted")
+        else:
+            messages.error(request, "You aren't authorized to do that!")
+    else:
+        messages.error(request, "Event not found!")
+    if request.GET.get('next'):
+        return HttpResponseRedirect(request.GET.get('next'))
+    return HttpResponseRedirect('/')
+
