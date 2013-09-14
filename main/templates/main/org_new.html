@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Editing {{org.name}}{% endblock title %}
+{% block title %}Creating organization{% endblock title %}
 
 {% block content %}
-	<h2>Editing {{org.name}}</h2><br>
+	<h2>Creating organization</h2><br>
 	{% if errors %}
 	<div style="background-color:#f72750;border-radius:5px;">
 		<h4 style="margin-left:10px">Oh noes!</h4>
@@ -14,7 +14,6 @@
 		</ul>
 	</div>
 	{% endif %}
-	
 	<form action="#" method="post" id="org-form">
 		{% csrf_token %}
 		<div class="form-group">

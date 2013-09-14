@@ -47,7 +47,31 @@ def org_edit(request, pk):
     else:
         err = validate_org(request, o)
         if isinstance(err, tuple):
-            return render(request, 'main.org_edit.html', {'org': err[1], 'errors': err[0]})
+            return render(request, 'main/org_edit.html', {'org': err[1], 'errors': err[0]})
         messages.success(request, 'Organization successfully edited')
         return HttpResponseRedirect(reverse('main:org_manage'))
 
+def org_new(request):
+    if request.method == "GET":
+        return render(request, 'main/org_new.html')
+    else:
+        o = Organization(admin=request.user)
+        err = validate_org(request, o)
+        if isinstance(err, tuple):
+            return render(request, 'main/org_new.html', {'org': err[1], 'errors': err[0]})
+        messages.success(request, 'Organization successfully created')
+        return HttpResponseRedirect(reverse('main:org_manage'))
+
+def org_delete(request, pk):
+    o = Organization.objects.get(pk=pk)
+    if o:
+        if request.user == o.admin:
+            o.delete()
+            messages.info(request, "Organization successfully deleted")
+        else:
+            messages.error(request, "You aren't authorized to do that!")
+    else:
+        messages.error(request, "Organization not found!")
+    if request.GET.get('next'):
+        return HttpResponseRedirect(request.GET.get('next'))
+    return HttpResponseRedirect('/')
