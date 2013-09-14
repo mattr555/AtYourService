@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
     # organization management
     url(r'^manage/$', org_views.org_manage, name='org_manage'),
+    url(r'^manage/org/(?P<pk>\d+)/$', org_views.org_edit, name='org_edit'),
 
     url(r'^list/(?P<page>\d+)/', views.list_events, name='list_page'),
     url(r'^list/$', views.list_events_one, name='list_events'),

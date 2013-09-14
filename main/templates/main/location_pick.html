@@ -35,6 +35,7 @@ $(document).ready(function(){
 			      	var latlng = results[0].geometry.location
 			      	map.setCenter(latlng.lat(), latlng.lng())
 			      	map.setZoom(10)
+			      	map.removeMarkers()
 			      	map.addMarker({
 			        	lat: latlng.lat(),
 			        	lng: latlng.lng()

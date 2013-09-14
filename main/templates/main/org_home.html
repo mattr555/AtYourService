@@ -16,7 +16,7 @@
 		<tbody>
 			{% for org in organizations %}
 				<tr>
-					<td><a {# href="{% url 'main:org_organization' org.id %}" #}>{{org.name}}</a></td>
+					<td><a href="{% url 'main:org_edit' org.id %}">{{org.name}}</a></td>
 					<td>{{org.event_count}}</td>
 					<td>{{org.member_count}}</td>
 				</tr>
