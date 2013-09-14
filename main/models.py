@@ -1,10 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from geopy import geocoders
+from django.core.cache import cache
 
+from geopy import geocoders
 from math import sin, cos, acos, radians
+import datetime
 
 def distance(p1_lat, p1_long, p2_lat, p2_long):
         # calculates the distance between p1 and p2
@@ -43,9 +45,15 @@ class Organization(models.Model):
         except:
             pass
 
+    def member_count(self):
+        return len(self.members.all())
+
+    def event_count(self):
+        return len(self.events.all())
+
     admin = models.ForeignKey(User, related_name='orgs_admin')
     members = models.ManyToManyField(User, related_name='organizations')
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, db_index=True)
     description = models.TextField()
     location = models.CharField(max_length=200)
     geo_lat = models.FloatField(blank=True, null=True)
@@ -95,6 +103,15 @@ class Event(models.Model):
         except:
             pass
 
+    def participant_count(self):
+        return len(self.participants.all())
+
+    def date_start_input(self):
+        return datetime.datetime.strftime(self.date_start, '%m/%d/%y %I:%M %p')
+
+    def date_end_input(self):
+        return datetime.datetime.strftime(self.date_end, '%m/%d/%y %I:%M %p')
+
     has_org_url = True
     objects = EventManager()
 
@@ -102,10 +119,10 @@ class Event(models.Model):
     confirmed_participants = models.ManyToManyField(User, related_name='confirmed_events')
     organizer = models.ForeignKey(User, related_name='events_organized')
     organization = models.ForeignKey(Organization, related_name='events')
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, db_index=True)
     description = models.TextField()
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
+    date_start = models.DateTimeField(db_index=True)
+    date_end = models.DateTimeField(db_index=True)
     location = models.CharField(max_length=100)
     geo_lat = models.FloatField(blank=True, null=True)
     geo_lon = models.FloatField(blank=True, null=True)
@@ -145,7 +162,7 @@ class UserEvent(models.Model):
     organization = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     date_start = models.DateTimeField()
-    date_end = models.DateTimeField(blank=True, null=True)
+    date_end = models.DateTimeField(blank=True, null=True, db_index=True)
     location = models.CharField(max_length=100)
     geo_lat = models.FloatField(blank=True, null=True)
     geo_lon = models.FloatField(blank=True, null=True)
@@ -163,6 +180,14 @@ class UserProfile(models.Model):
             self.geo_lon = lon
         except:
             pass
+
+    def is_org_admin(self):
+        group = Group.objects.get(name="Org_Admin")
+        return group in self.user.groups.all()
+
+    def is_volunteer(self):
+        group = Group.objects.get(name="Volunteer")
+        return group in self.user.groups.all()
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)

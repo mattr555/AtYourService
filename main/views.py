@@ -1,8 +1,6 @@
-from django.shortcuts import render, render_to_response, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,44 +11,11 @@ from itertools import chain
 from operator import attrgetter
 from datetime import datetime
 
-from main.forms import MyUserCreate, UserEventCreate
+from main.forms import UserEventCreate
 from main.models import Event, UserEvent, Organization
 
 def home(request):
     return render(request, 'main/home.html')
-
-def login_view(request):
-    if request.user.is_authenticated():
-        messages.error(request, 'You are already logged in')
-        return HttpResponseRedirect(request.GET.get('next', '/'))
-    if request.method == "POST":
-        uname, pword = request.POST.get('uname'), request.POST.get('pword')
-        user = authenticate(username=uname, password=pword)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                messages.success(request, 'You have been logged in')
-            else:
-                return render(request, 'main/login.html', {'error_message': 'That user is inactive!'})
-        else:
-            return render(request, 'main/login.html', {'error_message': 'Incorrect username/password combo.'})
-        return HttpResponseRedirect(request.GET.get('next', '/'))
-    return render(request, 'main/login.html')
-
-def logout_view(request):
-    logout(request)
-    messages.info(request, 'You have been logged out')
-    return HttpResponseRedirect('/')
-
-def signup(request):
-    if request.method == "POST":
-        form = MyUserCreate(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "User was created successfully. Please sign in.")
-            return HttpResponseRedirect('/')
-        return render(request, 'main/signup.html', {'errors': form.errors})
-    return render(request, 'main/signup.html')
 
 def list_events_one(request):
     return list_events(request, 1)
@@ -114,8 +79,8 @@ class EventView(generic.DetailView):
 
 def organization_detail(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
-    recent_events = o.events.filter(date_start__gte=timezone.now()).order_by('date_start')[:5]
-    return render(request, 'main/organization_detail.html', {'organization': o, 'recent_events': recent_events})
+    recent_events = list(o.events.filter(date_start__gte=timezone.now()).order_by('date_start')[:5])
+    return render(request, 'main/org_detail.html', {'organization': o, 'recent_events': recent_events})
 
 @login_required
 def userevent_detail(request, pk):
@@ -126,9 +91,24 @@ def userevent_detail(request, pk):
     return HttpResponseRedirect('/')
 
 @login_required
+def delete_userevent(request, pk):
+    event = UserEvent.objects.get(pk=pk)
+    if event:
+        if request.user == event.user:
+            event.delete()
+            messages.info(request, "Event successfully deleted")
+        else:
+            messages.error(request, "You aren't authorized to do that!")
+    else:
+        messages.error(request, "Event not found!")
+    if request.GET.get('next'):
+        return HttpResponseRedirect(request.GET.get('next'))
+    return HttpResponseRedirect('/')
+
+@login_required
 def track_events(request):
-    event = request.user.events.all()
-    user_event = request.user.user_events.all()
+    event = list(request.user.events.all())
+    user_event = list(request.user.user_events.all())
     event_set = sorted(chain(event, user_event),
                        key=attrgetter('date_end'))
     total_hours = 0
@@ -148,40 +128,3 @@ def track_events(request):
     return render(request, 'main/track_events.html', {'events': event_set,
                                                       'total_hours': total_hours,
                                                       'form': form})
-
-@login_required
-def delete_userevent(request, pk):
-    event = UserEvent.objects.get(pk=pk)
-    if event:
-        if request.user == event.user:
-            event.delete()
-            messages.info(request, "Event successfully deleted")
-        else:
-            messages.error(request, "You aren't authorized to do that!")
-    else:
-        messages.error(request, "Event not found!")
-    if request.GET.get('next'):
-        return HttpResponseRedirect(request.GET.get('next'))
-    return HttpResponseRedirect('/')
-
-@login_required
-def change_location(request):
-    if request.method == "POST":
-        p = request.user.user_profile
-        p.location = request.POST.get('location')
-        p.geo_lat = request.POST.get('lat')
-        p.geo_lon = request.POST.get('lon')
-        p.save()
-        messages.info(request, 'Location successfully added')
-        if request.GET.get('next'):
-            return HttpResponseRedirect(request.GET.get('next'))
-        return HttpResponseRedirect(reverse('main:user_profile'))  # should be profile detail
-    return render(request, 'main/location_pick.html')
-
-@login_required
-def user_profile(request):
-    return render(request, 'main/user_profile.html')
-
-def finish_change_pass(request):
-    messages.success(request, 'Password reset successfully')
-    return HttpResponseRedirect('/')

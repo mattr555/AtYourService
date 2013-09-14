@@ -12,9 +12,10 @@
 		<div id="map"></div>
 		{%endif%}
 	</div>
-	<div class='button-div' class='col-lg-2'>
+	<div class='button-div col-lg-2'>
 		{% if request.user == organization.admin %}
-		<button class='btn btn-info org-button pull-right disabled' data-id={{event.id}}>Administrator</button>
+		<button class='btn btn-info org-button pull-right disabled' data-id={{organization.id}}>Administrator</button>
+		<a href="{%url 'main:org_edit' organization.id%}" class="pull-right">Edit</a>
 		{% elif request.user in organization.members.all %}
 		<button class='btn btn-success org-button pull-right org-disabled disabled' data-id={{organization.id}}>Member</button>
 		{%else%}
@@ -23,7 +24,7 @@
 	</div>
 </div>
 <div>
-	<h3>Recent Events: <small><a href="/list/?organization_id={{organization.pk}}">See all</a></small></h3>
+	<h3>Upcoming Events: <small><a href="/list/?organization_id={{organization.pk}}">See all</a></small></h3>
 	{% if recent_events %}
 	{% for event in recent_events %}
 		<div class="list-event row">
@@ -44,7 +45,7 @@
 		</div>
 	{%endfor%}
 	{% else %}
-	<p>No recent events!</p>
+	<p>No upcoming events!</p>
 	{% endif %}
 </div>
 {%endblock%}
@@ -52,9 +53,26 @@
 {%block scripts%}
 <script src='/static/js/event_button.js'></script>
 <script src='/static/js/org_button.js'></script>
+<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.4/gmaps.min.js'></script>
 <script>
 $(document).ready(function(){
-	$('#browse-link').parent().addClass('active');
+	$('#browse-link').parent().addClass('active')
+
+	{% if organization.geo_lat %}
+	map = new GMaps({
+		div: '#map',
+		lat: {{organization.geo_lat}},
+		lng: {{organization.geo_lon}},
+		zoom: 10,	
+					
+	})
+
+	map.addMarker({
+	 	lat: {{organization.geo_lat}},
+	 	lng: {{organization.geo_lon}}
+	})
+	{% endif %}	
 })
 </script>
 {%endblock%}

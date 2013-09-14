@@ -1,10 +1,12 @@
 {%load mytags%}
+{%load cache%}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>{%block title%}{%endblock%}</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="/static/css/AtYourService.css">
@@ -12,6 +14,8 @@
 	<link rel="author" href="/humans.txt"/>
 </head>
 <body>
+	{% cache 60 navbar request.user.username %}
+	{# make cache length longer in production #}
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -24,9 +28,13 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a id="home-link" href="{%url 'main:home'%}">Home</a></li>
-					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse Events</a></li>
-					<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse</a></li>
+					{% if user.user_profile.is_volunteer %}
+						<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+					{%endif%}
+					{% if user.user_profile.is_org_admin %}
+						<li><a id="admin-link" href="{%url 'main:manage_home'%}">Manage Organizations</a></li>
+					{%endif%}
 				</ul>
 				{%if request.user.id%}
 					<p class="pull-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
@@ -36,6 +44,7 @@
 			</div><!--/.nav-collapse -->
 		</div>
 	</div>
+	{%endcache%}
 
 	<div id="content" class="container">
 		{% if messages %}

@@ -1,0 +1,111 @@
+{% extends 'main/base.html' %}
+
+{% block title %}New Event{% endblock title %}
+
+{% block content %}
+	<h2>New Event</h2><br>
+	{% if errors %}
+	<div style="background-color:#f2dede;border-radius:5px;">
+		<h4 style="margin-left:10px">Oh noes!</h4>
+		<ul>
+		{% for error in errors %}
+			<li>{{error}}</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<form action="#" method="post" id="event-form">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="org-field">Organization</label>
+			<select name="organization" id="org-field" class="form-control">
+				<option value="">-</option>
+				{%for org in request.user.orgs_admin.all %}
+					<option value="{{org.id}}">{{org.name}}</option>
+				{%endfor%}
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="name-field">Name</label>
+			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name}}">
+		</div>
+		<div class="form-group">
+			<label for="description-field">Description</label>
+			<textarea class="form-control" id="description-field" rows="3" name="description">{{event.description}}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="date-start-field">Start date/time</label>
+			<input type="text" class="form-control" id="date-start-field" name="date-start" {%if event.date_start%}value="{{event.date_start_input}}"{%endif%} placeholder="MM/DD/YY HH:MM AM/PM">
+		</div>
+		<div class="form-group">
+			<label for="date-end-field">End date/time</label>
+			<input type="text" class="form-control" id="date-end-field" name="date-end" {%if event.date_end%}value="{{event.date_end_input}}"{%endif%} placeholder="MM/DD/YY HH:MM AM/PM">
+		</div>
+		<div class="form-group">
+			<label for="location-field">Location</label>
+			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location}}">
+		</div>
+		<input type="hidden" id="lat-field" name="lat">
+		<input type="hidden" id="lon-field" name="lon">
+	</form>
+	<div class="pull-right"><a id="lookup-address" class="btn btn-primary">Lookup location</a></div><br>
+	<div id="map" style="margin-top:40px"></div>
+	<input type="submit" form="event-form" class="btn btn-success pull-right" id="submit-button" value="Save" style="margin-top:10px">
+{% endblock content %}
+
+{%block scripts%}
+	<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
+	<script src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.4/gmaps.min.js'></script>
+	<script src='/static/js/jquery.getUrlParam.js'></script>
+	<script>
+	$(document).ready(function(){
+		map = new GMaps({
+			div: '#map',
+			{% if event.geo_lat %}
+			lat: {{event.geo_lat}},
+			lng: {{event.geo_lon}},
+			zoom: 10,
+			{% else %}
+			lat: 39.828,
+			lng: -98.57,
+			zoom: 4,
+			{% endif %}
+			
+		})
+
+		{% if event.geo_lat %}
+		map.addMarker({
+			lat: {{event.geo_lat}},
+			lng: {{event.geo_lon}}
+		})
+		{% endif %}
+
+		$('#lookup-address').on('click', function(){
+			GMaps.geocode({
+				address: $('#location-field').val(),
+				callback: function(results, status) {
+				    if (status === 'OK') {
+				      	var latlng = results[0].geometry.location
+				      	map.setCenter(latlng.lat(), latlng.lng())
+				      	map.setZoom(10)
+				      	map.removeMarkers()
+				      	map.addMarker({
+				        	lat: latlng.lat(),
+				        	lng: latlng.lng()
+				      	})
+				      	$('#lat-field').val(latlng.lat())
+				      	$('#lon-field').val(latlng.lng())
+				    }
+				}
+			})
+		})
+
+		var org_id = $(document).getUrlParam('org')
+		$('option').each(function(){
+			if($(this).attr('value') === org_id){
+				$(this).attr('selected', 'selected')
+			}
+		})
+	})
+	</script>
+{%endblock%}
