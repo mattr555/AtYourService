@@ -80,7 +80,7 @@ class EventView(generic.DetailView):
 def organization_detail(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
     recent_events = list(o.events.filter(date_start__gte=timezone.now()).order_by('date_start')[:5])
-    return render(request, 'main/organization_detail.html', {'organization': o, 'recent_events': recent_events})
+    return render(request, 'main/org_detail.html', {'organization': o, 'recent_events': recent_events})
 
 @login_required
 def userevent_detail(request, pk):

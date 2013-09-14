@@ -12,9 +12,10 @@
 		<div id="map"></div>
 		{%endif%}
 	</div>
-	<div class='button-div' class='col-lg-2'>
+	<div class='button-div col-lg-2'>
 		{% if request.user == organization.admin %}
-		<button class='btn btn-info org-button pull-right disabled' data-id={{event.id}}>Administrator</button>
+		<button class='btn btn-info org-button pull-right disabled' data-id={{organization.id}}>Administrator</button>
+		<a href="{%url 'main:org_edit' organization.id%}" class="pull-right">Edit</a>
 		{% elif request.user in organization.members.all %}
 		<button class='btn btn-success org-button pull-right org-disabled disabled' data-id={{organization.id}}>Member</button>
 		{%else%}

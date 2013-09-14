@@ -19,6 +19,7 @@
 		<div class="form-group">
 			<label for="org-field">Organization</label>
 			<select name="organization" id="org-field" class="form-control">
+				<option value="">-</option>
 				{%for org in request.user.orgs_admin.all %}
 					<option value="{{org.id}}">{{org.name}}</option>
 				{%endfor%}
@@ -55,6 +56,7 @@
 {%block scripts%}
 	<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
 	<script src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.4/gmaps.min.js'></script>
+	<script src='/static/js/jquery.getUrlParam.js'></script>
 	<script>
 	$(document).ready(function(){
 		map = new GMaps({
@@ -96,6 +98,13 @@
 				    }
 				}
 			})
+		})
+
+		var org_id = $(document).getUrlParam('org')
+		$('option').each(function(){
+			if($(this).attr('value') === org_id){
+				$(this).attr('selected', 'selected')
+			}
 		})
 	})
 	</script>

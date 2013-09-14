@@ -21,7 +21,7 @@
 		<tbody>
 			{% for e in events %}
 			<tr>
-				<td>{{e.name}}</td>
+				<td><a href="{%url 'main:event_detail' e.id%}">{{e.name}}</a></td>
 				<td>{{e.date_start}}</td>
 				<td>{{e.participant_count}}</td>
 				<td><a href="{%url 'main:event_edit' e.id%}" class="btn btn-primary btn-xs" style="margin-right:5px">
@@ -35,9 +35,9 @@
 		</tbody>
 	</table>
 	{% else %}
-	No events found! <a href="{%url 'main:event_create'%}">Create one.</a>
+	No events found! <a href="{%url 'main:event_create'%}?org={{org.id}}">Create one.</a>
 	{% endif %}
-	<div class="pull-right"><a href="{%url 'main:event_create'%}" class="btn btn-success"><i class="icon-plus"></i> Create event</a></div>
+	<div class="pull-right"><a href="{%url 'main:event_create'%}?org={{org.id}}" class="btn btn-success"><i class="icon-plus"></i> Create Event</a></div>
 {% endblock content %}
 
 {% block scripts %}
@@ -47,7 +47,7 @@
 		$('.event-delete').on('click', function(){
 			var wantToDelete = confirm("Are you sure you want to delete this event? This action cannot be undone.");
 			if (wantToDelete){
-				window.location = "../../event/" + $(this).data('eventid') + "/delete?next={%url 'main:manage_home'%}";
+				window.location = "../../event/" + $(this).data('eventid') + "/delete?next={%url 'main:org_home' org.id%}";
 			}
 		})
 	})

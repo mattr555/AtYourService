@@ -19,9 +19,7 @@
 		<div class="form-group">
 			<label for="org-field">Organization</label>
 			<select name="organization" id="org-field" class="form-control">
-				{%for org in request.user.orgs_admin.all %}
-					<option value="{{org.id}}">{{org.name}}</option>
-				{%endfor%}
+				<option value="{{event.organization.id}}">{{event.organization.name}}</option>
 			</select>
 		</div>
 		<div class="form-group">
