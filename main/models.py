@@ -103,7 +103,7 @@ class Event(models.Model):
             pass
 
     def participant_count(self):
-        return len(self.participants)
+        return int(len(self.participants))
 
     has_org_url = True
     objects = EventManager()

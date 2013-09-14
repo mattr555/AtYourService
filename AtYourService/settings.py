@@ -131,3 +131,6 @@ MESSAGE_TAGS = {messages.ERROR: 'alert-danger',
 SITE_ID = 1
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+from django.conf import global_settings
+DATETIME_INPUT_FORMATS = global_settings.DATETIME_INPUT_FORMATS + ('%m/%d/%y %I:%M %p', '%m/%d/%Y %I:%M %p')

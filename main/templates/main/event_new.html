@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Create organization{% endblock title %}
+{% block title %}New Event{% endblock title %}
 
 {% block content %}
-	<h2>Create organization</h2><br>
+	<h2>New Event</h2><br>
 	{% if errors %}
 	<div style="background-color:#f2dede;border-radius:5px;">
 		<h4 style="margin-left:10px">Oh noes!</h4>
@@ -14,26 +14,42 @@
 		</ul>
 	</div>
 	{% endif %}
-	<form action="#" method="post" id="org-form">
+	<form action="#" method="post" id="event-form">
 		{% csrf_token %}
 		<div class="form-group">
+			<label for="org-field">Organization</label>
+			<select name="organization" id="org-field" class="form-control">
+				{%for org in request.user.orgs_admin.all %}
+					<option value="{{org.id}}">{{org.name}}</option>
+				{%endfor%}
+			</select>
+		</div>
+		<div class="form-group">
 			<label for="name-field">Name</label>
-			<input type="text" class="form-control" id="name-field" name="name" value="{{org.name}}">
+			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name}}">
 		</div>
 		<div class="form-group">
 			<label for="description-field">Description</label>
-			<textarea class="form-control" id="description-field" rows="3" name="description">{{org.description}}</textarea>
+			<textarea class="form-control" id="description-field" rows="3" name="description">{{event.description}}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="date-start-field">Start date/time</label>
+			<input type="text" class="form-control" id="date-start-field" name="date-start" value="{{event.date_start}}" placeholder="MM/DD/YY HH:MM AM/PM">
+		</div>
+		<div class="form-group">
+			<label for="date-end-field">End date/time</label>
+			<input type="text" class="form-control" id="date-end-field" name="date-end" value="{{event.date_end}}" placeholder="MM/DD/YY HH:MM AM/PM">
 		</div>
 		<div class="form-group">
 			<label for="location-field">Location</label>
-			<input type="text" class="form-control" id="location-field" name="location" value="{{org.location}}">
+			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location}}">
 		</div>
 		<input type="hidden" id="lat-field" name="lat">
 		<input type="hidden" id="lon-field" name="lon">
 	</form>
 	<div class="pull-right"><a id="lookup-address" class="btn btn-primary">Lookup location</a></div><br>
 	<div id="map" style="margin-top:40px"></div>
-	<input type="submit" form="org-form" class="btn btn-success pull-right" id="submit-button" value="Save" style="margin-top:10px">
+	<input type="submit" form="event-form" class="btn btn-success pull-right" id="submit-button" value="Save" style="margin-top:10px">
 {% endblock content %}
 
 {%block scripts%}
@@ -43,9 +59,9 @@
 	$(document).ready(function(){
 		map = new GMaps({
 			div: '#map',
-			{% if org.geo_lat %}
-			lat: {{org.geo_lat}},
-			lng: {{org.geo_lon}},
+			{% if event.geo_lat %}
+			lat: {{event.geo_lat}},
+			lng: {{event.geo_lon}},
 			zoom: 10,
 			{% else %}
 			lat: 39.828,
@@ -55,10 +71,10 @@
 			
 		})
 
-		{% if org.geo_lat %}
+		{% if event.geo_lat %}
 		map.addMarker({
-			lat: {{org.geo_lat}},
-			lng: {{org.geo_lon}}
+			lat: {{event.geo_lat}},
+			lng: {{event.geo_lon}}
 		})
 		{% endif %}
 

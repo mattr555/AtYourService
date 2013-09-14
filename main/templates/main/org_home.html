@@ -16,7 +16,6 @@
 				<td>Date</td>
 				<td>Number of participants</td>
 				<td></td>
-				<td></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -25,20 +24,20 @@
 				<td>{{e.name}}</td>
 				<td>{{e.date_start}}</td>
 				<td>{{e.participant_count}}</td>
-				<td><a {# href="{%url 'main:event_edit' e.id%}" #} class="btn btn-primary btn-xs">
-					<i class="icon-pencil"> Edit</i>
-				</a></td>
-				<td><a {# href="{%url 'main:event_delete' e.id%}" #} class="btn btn-danger btn-xs">
+				<td><a {# href="{%url 'main:event_edit' e.id%}" #} class="btn btn-primary btn-xs" style="margin-right:5px">
+					<i class="icon-pencil"></i> Edit
+				</a><a {# href="{%url 'main:event_delete' e.id%}" #} class="btn btn-danger btn-xs">
 					Delete
 				</a></td>
+				<td></td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 	{% else %}
-	No events found! <a {# href="{%url 'main:event_new'%}" #}>Create one.</a>
+	No events found! <a href="{%url 'main:event_create'%}">Create one.</a>
 	{% endif %}
-	<div class="pull-right"><a {# href="{%url 'main:event_new'%}" #} class="btn btn-success"><i class="icon-plus"></i> Create event</a></div>
+	<div class="pull-right"><a href="{%url 'main:event_create'%}" class="btn btn-success"><i class="icon-plus"></i> Create event</a></div>
 {% endblock content %}
 
 {% block scripts %}
