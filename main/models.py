@@ -102,6 +102,9 @@ class Event(models.Model):
         except:
             pass
 
+    def participant_count(self):
+        return len(self.participants)
+
     has_org_url = True
     objects = EventManager()
 

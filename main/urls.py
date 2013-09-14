@@ -12,8 +12,9 @@ urlpatterns = patterns('',
     url(r'^profile/$', user_views.user_profile, name='user_profile'),
 
     # organization management
-    url(r'^manage/$', org_views.org_manage, name='org_manage'),
-    url(r'^manage/org/(?P<pk>\d+)/$', org_views.org_edit, name='org_edit'),
+    url(r'^manage/$', org_views.manage_home, name='manage_home'),
+    url(r'^manage/org/(?P<pk>\d+)/$', org_views.org_home, name='org_home'),
+    url(r'^manage/org/(?P<pk>\d+)/edit/$', org_views.org_edit, name='org_edit'),
     url(r'^manage/org/new/$', org_views.org_new, name='org_create'),
     url(r'^manage/org/(?P<pk>\d+)/delete/$', org_views.org_delete, name='org_delete'),
 

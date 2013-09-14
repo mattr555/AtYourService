@@ -7,11 +7,20 @@ from django.core.urlresolvers import reverse
 from main.models import Organization
 
 @login_required
-def org_manage(request):
+def manage_home(request):
     if not request.user.user_profile.is_org_admin:
         messages.error("You aren't an organization administrator!")
         return HttpResponseRedirect('/')
-    return render(request, 'main/org_home.html', {'organizations': request.user.orgs_admin.all()})
+    return render(request, 'main/manage_home.html', {'organizations': request.user.orgs_admin.all()})
+
+@login_required
+def org_home(request, pk):
+    o = get_object_or_404(Organization.objects, pk=pk)
+    if not request.user == o.admin:
+        messages.error("You aren't authorized to do that!")
+        return HttpResponseRedirect('/')
+    events = o.events.order_by('-date_start')
+    return render(request, 'main/org_home.html', {'org': o, 'events': events})
 
 def validate_org(request, o):
     errors = []
@@ -35,7 +44,6 @@ def validate_org(request, o):
     o.save()
     return True
 
-
 @login_required
 def org_edit(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
@@ -49,8 +57,9 @@ def org_edit(request, pk):
         if isinstance(err, tuple):
             return render(request, 'main/org_edit.html', {'org': err[1], 'errors': err[0]})
         messages.success(request, 'Organization successfully edited')
-        return HttpResponseRedirect(reverse('main:org_manage'))
+        return HttpResponseRedirect(reverse('main:manage_home'))
 
+@login_required
 def org_new(request):
     if request.method == "GET":
         return render(request, 'main/org_new.html')
@@ -60,8 +69,9 @@ def org_new(request):
         if isinstance(err, tuple):
             return render(request, 'main/org_new.html', {'org': err[1], 'errors': err[0]})
         messages.success(request, 'Organization successfully created')
-        return HttpResponseRedirect(reverse('main:org_manage'))
+        return HttpResponseRedirect(reverse('main:manage_home'))
 
+@login_required
 def org_delete(request, pk):
     o = Organization.objects.get(pk=pk)
     if o:
