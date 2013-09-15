@@ -1,4 +1,7 @@
 {%extends 'main/base.html'%}
+
+{%block title%}AtYourService{%endblock%}
+
 {%block content%}
 <div class="jumbotron">
 	<h1>Track Service.</h1>
@@ -22,14 +25,4 @@
 	</div>
 </div>
 
-{%endblock%}
-
-{%block title%}AtYourService{%endblock%}
-
-{%block scripts%}
-<script type='text/javascript'>
-	$(document).ready(function(){
-		$('#home-link').parent().addClass('active');
-	})
-</script>
 {%endblock%}

@@ -32,3 +32,10 @@
 
 .dropdown-menu li input {
   margin-left: 20px; }
+
+.footer {
+  padding-top: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #777;
+  border-top: 1px solid #e5e5e5; }

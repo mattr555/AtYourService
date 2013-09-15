@@ -12,7 +12,7 @@
 
 	Bootstrap
 	CSS & JS plugins and framework
-	twitter.github.io/bootstrap
+	getbootstrap.com
 
 	jQuery
 	DOM API for JS
@@ -36,7 +36,7 @@
 
 /* SITE */
 	
-	Last Update: 2013/07/27
+	Last Update: ...ongoing
 	Language: English
 	Standards: HTML5, CSS3
 	Doctype: HTML5
