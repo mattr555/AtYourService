@@ -10,8 +10,8 @@ from main.models import Organization, Event
 
 @login_required
 def manage_home(request):
-    if not request.user.user_profile.is_org_admin:
-        messages.error("You aren't an organization administrator!")
+    if not request.user.user_profile.is_org_admin():
+        messages.error(request, "You aren't an organization administrator!")
         return HttpResponseRedirect('/')
     return render(request, 'main/manage_home.html', {'organizations': request.user.orgs_admin.all()})
 
@@ -19,7 +19,7 @@ def manage_home(request):
 def org_home(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
     if not request.user == o.admin:
-        messages.error("You aren't authorized to do that!")
+        messages.error(request, "You aren't authorized to do that!")
         return HttpResponseRedirect('/')
     events = o.events.order_by('-date_start')
     return render(request, 'main/org_home.html', {'org': o, 'events': events})
@@ -50,7 +50,7 @@ def validate_org(request, o):
 def org_edit(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
     if o not in request.user.orgs_admin.all():
-        messages.error("That's not your organization!")
+        messages.error(request, "That's not your organization!")
         return HttpResponseRedirect(reverse('main:org_manage'))
     if request.method == "GET":
         return render(request, 'main/org_edit.html', {'org': o})
@@ -63,7 +63,7 @@ def org_edit(request, pk):
 
 @login_required
 def org_new(request):
-    if request.user.userprofile.is_org_admin:
+    if request.user.user_profile.is_org_admin():
         if request.method == "GET":
             return render(request, 'main/org_new.html')
         else:
@@ -74,7 +74,7 @@ def org_new(request):
             messages.success(request, 'Organization successfully created')
             return HttpResponseRedirect(reverse('main:manage_home'))
     else:
-        messages.error("You aren't an organization administrator!")
+        messages.error(request, "You aren't an organization administrator!")
         return HttpResponseRedirect('/')
 
 @login_required
