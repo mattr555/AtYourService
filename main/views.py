@@ -20,22 +20,24 @@ def home(request):
 def list_events_one(request):
     return list_events(request, 1)
 
-@login_required
 def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):
-        if request.user.user_profile.geo_lat:
-            dist = request.GET.get('range')
-            set = Event.objects.within(request.user.user_profile, float(dist))
-            set = set.filter(date_start__gte=timezone.now()).order_by('date_start')
-            if float(dist) == 1.0:
-                mi = ' mile'
+        if not request.user.is_anonymous:
+            if request.user.user_profile.geo_lat:
+                dist = request.GET.get('range')
+                set = Event.objects.within(request.user.user_profile, float(dist))
+                set = set.filter(date_start__gte=timezone.now()).order_by('date_start')
+                if float(dist) == 1.0:
+                    mi = ' mile'
+                else:
+                    mi = ' miles'
+                filters['Search radius: ' + request.GET.get('range') + mi] = 'range=' + dist
             else:
-                mi = ' miles'
-            filters['Search radius: ' + request.GET.get('range') + mi] = 'range=' + dist
+                messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
+                               extra_tags='safe')
+                set = Event.objects.filter(date_start__gte=timezone.now()).order_by('date_start')
         else:
-            messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
-                           extra_tags='safe')
             set = Event.objects.filter(date_start__gte=timezone.now()).order_by('date_start')
     else:
         set = Event.objects.filter(date_start__gte=timezone.now()).order_by('date_start')
@@ -52,12 +54,16 @@ def list_events(request, page):
             elif 'name' in k:
                 filters["Name contains: " + v] = k + '=' + v
             elif 'date' in k:
-                if k == 'date_start__gte':
-                    filters["Date after: " + v] = k + '=' + v
-                elif k == 'date_start__lte':
-                    filters["Date before: " + v] = k + '=' + v
                 raw_date = v.split('/')
-                v = datetime(int(raw_date[2]), int(raw_date[0]), int(raw_date[1]))
+                try:
+                    v = datetime(int(raw_date[2]), int(raw_date[0]), int(raw_date[1]))
+                    if k == 'date_start__gte':
+                        filters["Date after: " + v] = k + '=' + v
+                    elif k == 'date_start__lte':
+                        filters["Date before: " + v] = k + '=' + v
+                except:
+                    messages.error(request, 'Invalid date!')
+                    continue
             filter_dict[k] = v
         set = set.filter(**filter_dict)
 
