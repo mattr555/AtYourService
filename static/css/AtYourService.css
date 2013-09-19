@@ -40,17 +40,12 @@
   padding-bottom: 10px;
   color: #777;
   border-top: 1px solid #e5e5e5; }
-  .footer .social-link {
-    color: #777777; }
 
-.social-link + .social-link {
-  margin-left: 0; }
-
-.social-link:hover {
-  text-decoration: none; }
-
-.social-link .icon-twitter-sign:hover {
-  color: #3cf; }
-
-.social-link .icon-github-sign:hover {
-  color: #333; }
+.social-link {
+  color: #777; }
+  .social-link :hover {
+    text-decoration: none; }
+  .social-link .icon-twitter-sign:hover {
+    color: #3cf; }
+  .social-link .icon-github-sign:hover {
+    color: #333; }

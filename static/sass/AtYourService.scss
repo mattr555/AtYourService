@@ -57,24 +57,20 @@
 	} 
 	color: #777;
 	border-top: 1px solid #e5e5e5;
+}
 
-	.social-link {
-		color: #777
+.social-link {
+	color: #777;
+
+	:hover{
+		text-decoration: none;
 	}
-}
 
-.social-link + .social-link {
-	margin-left: 0;
-}
+	.icon-twitter-sign:hover{
+		color:#3cf;
+	}
 
-.social-link:hover{
-	text-decoration:none;
-}
-
-.social-link .icon-twitter-sign:hover {
-	color: #3cf;
-}
-
-.social-link .icon-github-sign:hover{
-	color: #333;
+	.icon-github-sign:hover{
+		color:#333;
+	}
 }
