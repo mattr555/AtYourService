@@ -106,8 +106,6 @@ INSTALLED_APPS = (
     'south',
     'main',
     'ajax',
-    'widget_tweaks',
-    'bootstrapform',
 )
 
 EMAIL_SUBJECT_PREFIX = '[AtYourService] '

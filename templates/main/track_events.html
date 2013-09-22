@@ -17,8 +17,20 @@
 			<div class='modal-body'>
 				<form id='event-form' method='post'>
 					{%csrf_token%}
-					{%load bootstrap%}
-					{{form|bootstrap}}
+					{% if form.non_field_errors %}
+						<div class="alert alert-error">
+							<a class="close" data-dismiss="alert">&times;</a>
+							{% for non_field_error in form.non_field_errors %}
+								 {{ non_field_error }}
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% for field in form %}
+					<div class="form-group">
+						<label for="{{field.html_name}}-field">{{field.label}}</label>
+						<input type="text" class="form-control" id="{{field.html_name}}-field" name="{{field.html_name}}" {% if field.value%}value="{{field.value}}"{%endif%}>
+					</div>
+					{%endfor%}
 				</form>
 			</div>
 			<div class='modal-footer'>
