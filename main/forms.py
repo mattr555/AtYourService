@@ -4,15 +4,18 @@ from django.contrib.auth.forms import UserCreationForm
 from datetime import timedelta
 from main.models import UserEvent, UserProfile
 
+import pytz
+
 class MyUserCreate(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     volunteer = forms.BooleanField(required=False)
     org_admin = forms.BooleanField(required=False)
+    timezone = forms.ChoiceField(required=True)
 
     class Meta:
-        fields = ('first_name', 'last_name', 'email', 'volunteer', 'org_admin',)
+        fields = ('first_name', 'last_name', 'email', 'volunteer', 'org_admin', 'timezone',)
         model = User
 
     def save(self, commit=True):
@@ -26,6 +29,7 @@ class MyUserCreate(UserCreationForm):
             user.groups.add(Group.objects.get(name="Org_Admin"))
         user.save()
         profile = UserProfile(user=user)
+        profile.timezone = self.cleaned_data['timezone']
         profile.save()
         return user
 

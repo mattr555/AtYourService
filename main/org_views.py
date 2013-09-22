@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 import datetime
+import pytz
 
 from main.models import Organization, Event
 
@@ -115,11 +116,15 @@ def validate_event(request, e):
     else:
         errors.append('A location is required')
     if request.POST.get('date-start'):
-        e.date_start = datetime.datetime.strptime(request.POST.get('date-start'), '%m/%d/%y %I:%M %p')
+        naive = datetime.datetime.strptime(request.POST.get('date-start'), '%m/%d/%y %I:%M %p')
+        tz = pytz.timezone(request.user.user_profile.timezone)
+        e.date_start = tz.localize(naive)
     else:
         errors.append('A start date is required')
     if request.POST.get('date-end'):
-        e.date_end = datetime.datetime.strptime(request.POST.get('date-end'), '%m/%d/%y %I:%M %p')
+        naive = datetime.datetime.strptime(request.POST.get('date-end'), '%m/%d/%y %I:%M %p')
+        tz = pytz.timezone(request.user.user_profile.timezone)
+        e.date_end = tz.localize(naive)
     else:
         errors.append('An end date is required')
     if request.POST.get('lat'):

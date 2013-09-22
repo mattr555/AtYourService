@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
+import pytz
+
 from main.forms import MyUserCreate
 
 def login_view(request):
@@ -37,8 +39,8 @@ def signup(request):
             form.save()
             messages.success(request, "User was created successfully. Please sign in.")
             return HttpResponseRedirect('/')
-        return render(request, 'main/signup.html', {'errors': form.errors})
-    return render(request, 'main/signup.html')
+        return render(request, 'main/signup.html', {'errors': form.errors, 'timezones': pytz.common_timezones})
+    return render(request, 'main/signup.html', {'timezones': pytz.common_timezones})
 
 @login_required
 def change_location(request):

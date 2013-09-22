@@ -71,6 +71,13 @@
         <input type="text" class="input-block-level form-control" placeholder="First name" name="first_name">
         <input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name">
         <input type="text" class="input-block-level form-control" placeholder="Email" name="email">
+        <label for="timezone-field">Timezone</label>
+        <select name="timezone" id="timezone-field" class="form-control input-block-level">
+          <option value="">-</option>
+          {% for tz in timezones %}
+            <option value="{{tz}}">{{tz}}</option>
+          {% endfor %}
+        </select>
         <label class="checkbox">
           <input type="checkbox" name="volunteer" checked="checked">
           I am a volunteer who wants to track hours
