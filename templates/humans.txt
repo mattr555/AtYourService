@@ -26,10 +26,6 @@
 	Table Sorter
 	kryogenix.org/code/browser/sorttable
 
-	Google Closure Compiler
-	JS Minifier
-	closure-compiler.appspot.com/home
-
 	Font Awesome
 	Icons & Glyphs
 	fortawesome.github.io/Font-Awesome
