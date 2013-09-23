@@ -91,6 +91,13 @@ class Event(models.Model):
                 return "Unconfirmed"
         return "Not participating"
 
+    def status_class(self, user):
+        STATUS_CLASSES = {"Unconfirmed": "warning",
+                          "User-created Event": "success",
+                          "Confirmed": "success",
+                          }
+        return STATUS_CLASSES.get(self.status(user), "")
+
     def getOrganization(self):
         return self.organization.name
 
@@ -143,6 +150,9 @@ class UserEvent(models.Model):
                 return "Event has not occurred yet"
             return "User-created Event"
         return "Not participating"
+
+    def status_class(self, user):
+        return "success" if self.status(user) == "User-created Event" else ""
 
     def getOrganization(self):
         return self.organization
