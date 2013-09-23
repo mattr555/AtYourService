@@ -5,8 +5,11 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache
 
 from geopy import geocoders
+from collections import namedtuple
 from math import sin, cos, acos, radians
 import datetime
+
+ConfirmTuple = namedtuple('ConfirmTuple', 'status row_class button_class button_text')
 
 def distance(p1_lat, p1_long, p2_lat, p2_long):
         # calculates the distance between p1 and p2
@@ -91,12 +94,18 @@ class Event(models.Model):
                 return "Unconfirmed"
         return "Not participating"
 
-    def status_class(self, user):
+    def confirm_status(self, user):
         STATUS_CLASSES = {"Unconfirmed": "warning",
-                          "User-created Event": "success",
-                          "Confirmed": "success",
-                          }
-        return STATUS_CLASSES.get(self.status(user), "")
+                          "Confirmed": "success"}
+        BUTTON_CLASSES = {"Unconfirmed": "btn-success",
+                          "Confirmed": "btn-warning"}
+        BUTTON_TEXT = {"Unconfirmed": "Confirm",
+                       "Confirmed": "Unconfirmed"}
+        status = self.status(user)
+        return ConfirmTuple(status,
+                            STATUS_CLASSES.get(status, ""),
+                            BUTTON_CLASSES.get(status, ""),
+                            BUTTON_TEXT.get(status, ""))
 
     def getOrganization(self):
         return self.organization.name

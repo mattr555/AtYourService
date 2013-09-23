@@ -43,4 +43,3 @@ def unjoin_org(request):
         org = Organization.objects.get(pk=org_id)
         org.members.remove(request.user)
         return {}
-

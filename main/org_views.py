@@ -139,10 +139,14 @@ def validate_event(request, e):
         return (errors, e)
     return True
 
+@login_required
 def event_home(request, pk):
     e = get_object_or_404(Event.objects, pk=pk)
     if request.user == e.organizer:
-        return render(request, 'main/event_home.html', {'event': e})
+        user_statuses = []
+        for u in e.participants.all():
+            user_statuses.append([u, e.confirm_status(u)])
+        return render(request, 'main/event_home.html', {'event': e, 'user_statuses': user_statuses})
     messages.error(request, "That's not your event!")
     return HttpResponseRedirect(reverse('main:manage_home'))
 

@@ -4,7 +4,7 @@
     var error_func, update_status;
     error_func = function(response, a, b) {
       if (response.status === 403) {
-        if (response.responsJSON.data.message === "User must be a volunteer") {
+        if (response.responseJSON.data.message === "User must be a volunteer") {
           $('#content').prepend('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button>User must be a volunteer.</div>');
         } else {
           window.location = "/login?next=" + window.location;

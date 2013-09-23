@@ -1,4 +1,5 @@
 {%extends 'main/base.html'%}
+{%load mytags%}
 
 {% block title %}Managing {{event.name}}{% endblock title %}
 
@@ -12,18 +13,21 @@
 	<hr>
 	<h3>Participants</h3>
 	{% if event.participants.all %}
-		<table>
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<td>Name</td>
+					<td>Status</td>
 					<td></td>
 				</tr>
 			</thead>
 			<tbody>
-				{% for p in event.participants.all %}
-					<tr>
-						<td>{{p.get_full_name}}</td>
-						<td></td>
+				{% for u, s in user_statuses %}
+					<tr class="{{s.row_class}}">
+						<td>{{u.get_full_name}}</td>
+						<td>{{s.status}}</td>
+						<td><a data-id="{{u.id}}" class="confirm-button btn btn-xs {{s.button_class}}">
+						{{s.button_text}}</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
