@@ -21,7 +21,7 @@
 		<tbody>
 			{% for e in events %}
 			<tr>
-				<td><a href="{%url 'main:event_detail' e.id%}">{{e.name}}</a></td>
+				<td><a href="{%url 'main:event_home' e.id%}">{{e.name}}</a></td>
 				<td>{{e.date_start}}</td>
 				<td>{{e.participant_count}}</td>
 				<td><a href="{%url 'main:event_edit' e.id%}" class="btn btn-primary btn-xs" style="margin-right:5px">
