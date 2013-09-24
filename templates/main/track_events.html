@@ -46,7 +46,7 @@
 	</thead>
 	<tbody>
 		{%for event in events%}
-		<tr class='{{ event|args:request.user|call:"status_class" }}'>
+		<tr class='{{ event|args:request.user|call:"row_class" }}'>
 			<td><a href="{{event.detail_url}}">{{event.name}}</a></td>
 			<td>{{event.date_start}}</td>
 			{% if event.has_org_url %}

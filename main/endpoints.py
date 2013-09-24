@@ -49,11 +49,35 @@ def confirm_participant(request):
     e = Event.objects.get(id=int(request.POST.get('event_id')))
     if not e:
         raise AJAXError(404, "Event not found")
-    if request.user == e.organizer:
+    if request.user.id == e.organizer_id:
         u = User.objects.get(id=int(request.POST.get('user_id')))
         if not u:
             raise AJAXError(404, "User not found")
-        e.confirmed_participants.add(u)
+        if u in e.participants.all():
+            e.confirmed_participants.add(u)
+        else:
+            raise AJAXError(404, "User is not a participant")
+        status = e.confirm_status(u)
+        return {'status': status.status,
+                'row_class': status.row_class,
+                'button_class': status.button_class,
+                'button_text': status.button_text}
+    else:
+        raise AJAXError(403, "User must be event organizer")
+
+@login_required
+def unconfirm_participant(request):
+    e = Event.objects.get(id=int(request.POST.get('event_id')))
+    if not e:
+        raise AJAXError(404, "Event not found")
+    if request.user.id == e.organizer_id:
+        u = User.objects.get(id=int(request.POST.get('user_id')))
+        if not u:
+            raise AJAXError(404, "User not found")
+        if u in e.participants.all() and u in e.confirmed_participants.all():
+            e.confirmed_participants.remove(u)
+        else:
+            raise AJAXError(404, "User is not a participant")
         status = e.confirm_status(u)
         return {'status': status.status,
                 'row_class': status.row_class,

@@ -91,7 +91,7 @@ def organization_detail(request, pk):
 @login_required
 def userevent_detail(request, pk):
     e = get_object_or_404(UserEvent.objects, pk=pk)
-    if request.user == e.user:
+    if request.user.id == e.user_id:
         return render(request, 'main/userevent_detail.html', {'userevent': e})
     messages.error(request, "That's not your event!")
     return HttpResponseRedirect('/')
@@ -100,7 +100,7 @@ def userevent_detail(request, pk):
 def delete_userevent(request, pk):
     event = UserEvent.objects.get(pk=pk)
     if event:
-        if request.user == event.user:
+        if request.user.id == event.user_id:
             event.delete()
             messages.info(request, "Event successfully deleted")
         else:

@@ -29,10 +29,10 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse</a></li>
-					{% if user.user_profile.is_volunteer %}
+					{% if request.user|is_volunteer %}
 						<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
 					{%endif%}
-					{% if user.user_profile.is_org_admin %}
+					{% if request.user|is_org_admin %}
 						<li><a id="admin-link" href="{%url 'main:manage_home'%}">Manage Organizations</a></li>
 					{%endif%}
 				</ul>

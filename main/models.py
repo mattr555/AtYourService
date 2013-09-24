@@ -95,17 +95,22 @@ class Event(models.Model):
         return "Not participating"
 
     def confirm_status(self, user):
-        STATUS_CLASSES = {"Unconfirmed": "warning",
-                          "Confirmed": "success"}
+        ROW_CLASSES = {"Unconfirmed": "warning",
+                       "Confirmed": "success"}
         BUTTON_CLASSES = {"Unconfirmed": "btn-success",
                           "Confirmed": "btn-warning"}
         BUTTON_TEXT = {"Unconfirmed": "Confirm",
                        "Confirmed": "Unconfirm"}
         status = self.status(user)
         return ConfirmTuple(status,
-                            STATUS_CLASSES.get(status, ""),
+                            ROW_CLASSES.get(status, ""),
                             BUTTON_CLASSES.get(status, ""),
                             BUTTON_TEXT.get(status, ""))
+
+    def row_class(self, user):
+        ROW_CLASSES = {"Unconfirmed": "warning",
+                       "Confirmed": "success"}
+        return ROW_CLASSES.get(self.status(user), "")
 
     def getOrganization(self):
         return self.organization.name
@@ -120,7 +125,7 @@ class Event(models.Model):
             pass
 
     def participant_count(self):
-        return len(self.participants.all())
+        return self.participants.all().count()
 
     def date_start_input(self):
         return datetime.datetime.strftime(self.date_start, '%m/%d/%y %I:%M %p')
@@ -160,7 +165,7 @@ class UserEvent(models.Model):
             return "User-created Event"
         return "Not participating"
 
-    def status_class(self, user):
+    def row_class(self, user):
         return "success" if self.status(user) == "User-created Event" else ""
 
     def getOrganization(self):
@@ -201,12 +206,10 @@ class UserProfile(models.Model):
             pass
 
     def is_org_admin(self):
-        group = Group.objects.get(name="Org_Admin")
-        return group in self.user.groups.all()
+        return self.user.groups.filter(name="Org_Admin").count() > 0
 
     def is_volunteer(self):
-        group = Group.objects.get(name="Volunteer")
-        return group in self.user.groups.all()
+        return self.user.groups.filter(name="Volunteer").count() > 0
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)
