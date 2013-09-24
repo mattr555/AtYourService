@@ -100,7 +100,7 @@ class Event(models.Model):
         BUTTON_CLASSES = {"Unconfirmed": "btn-success",
                           "Confirmed": "btn-warning"}
         BUTTON_TEXT = {"Unconfirmed": "Confirm",
-                       "Confirmed": "Unconfirmed"}
+                       "Confirmed": "Unconfirm"}
         status = self.status(user)
         return ConfirmTuple(status,
                             STATUS_CLASSES.get(status, ""),

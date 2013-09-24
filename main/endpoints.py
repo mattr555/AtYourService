@@ -43,3 +43,21 @@ def unjoin_org(request):
         org = Organization.objects.get(pk=org_id)
         org.members.remove(request.user)
         return {}
+
+@login_required
+def confirm_participant(request):
+    e = Event.objects.get(id=int(request.POST.get('event_id')))
+    if not e:
+        raise AJAXError(404, "Event not found")
+    if request.user == e.organizer:
+        u = User.objects.get(id=int(request.POST.get('user_id')))
+        if not u:
+            raise AJAXError(404, "User not found")
+        e.confirmed_participants.add(u)
+        status = e.confirm_status(u)
+        return {'status': status.status,
+                'row_class': status.row_class,
+                'button_class': status.button_class,
+                'button_text': status.button_text}
+    else:
+        raise AJAXError(403, "User must be event organizer")
