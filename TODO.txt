@@ -1,5 +1,5 @@
 What should happen before a 0.1 release:
-	Confirmation of user attendance
+	Email validation
 
 What should happen before a 0.9 (closed beta) release:
 	Django admin page
@@ -21,4 +21,4 @@ Done:
 		cron + django.core.mail
 	Organization manipulation
 	Adding events defined by organization
-	Email validation
+	Confirmation of user attendance
