@@ -44,6 +44,8 @@
 <script src='//cdn.jsdelivr.net/sorttable/2/sorttable.min.js'></script>
 <script>
 	$(document).ready(function(){
+		$('#admin-link').parent().addClass('active')
+
 		$('.event-delete').on('click', function(){
 			var wantToDelete = confirm("Are you sure you want to delete this event? This action cannot be undone.");
 			if (wantToDelete){

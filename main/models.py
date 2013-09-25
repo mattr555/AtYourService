@@ -49,10 +49,10 @@ class Organization(models.Model):
             pass
 
     def member_count(self):
-        return len(self.members.all())
+        return self.members.count()
 
     def event_count(self):
-        return len(self.events.all())
+        return self.events.count()
 
     admin = models.ForeignKey(User, related_name='orgs_admin')
     members = models.ManyToManyField(User, related_name='organizations')

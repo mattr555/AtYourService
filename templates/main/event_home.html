@@ -44,4 +44,9 @@
 
 {% block scripts %}
 	<script src="/static/js/confirm_button.js"></script>
+	<script>
+	$(document).ready(function(){
+		$('#admin-link').parent().addClass('active')
+	})
+	</script>
 {% endblock scripts %}
