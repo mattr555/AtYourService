@@ -22,7 +22,7 @@
 	<div class='button-div col-lg-2'>
 		{% if request.user == event.organizer %}
 		<a class='btn btn-info commit-button pull-right disabled' data-id={{event.id}}>Organizing</a>
-		<a href="{%url 'main:event_edit' event.id%}" class="pull-right">Edit</a>
+		<a href="{%url 'main:event_home' event.id%}" class="pull-right">Edit</a>
 		{% elif request.user in event.participants.all %}
 		<a class='btn btn-success commit-button pull-right commit-disabled disabled' data-id={{event.id}}>Participating</a>
 		{%else%}

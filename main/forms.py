@@ -40,6 +40,9 @@ class MyUserCreate(UserCreationForm):
             raise forms.ValidationError('A checkbox is required')
 
 class UserEventCreate(forms.ModelForm):
+    date_start = forms.DateTimeField(required=True, widget=forms.DateTimeInput(format='%m/%d/%Y %I:%M %p'))
+    date_end = forms.DateTimeField(widget=forms.DateTimeInput(format='%m/%d/%Y %I:%M %p'))
+
     class Meta:
         model = UserEvent
         fields = ('name', 'description', 'date_start', 'date_end', 'location', 'hours_worked')

@@ -19,7 +19,7 @@ def manage_home(request):
 @login_required
 def org_home(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
-    if not request.user == o.admin:
+    if not request.user.id == o.admin_id:
         messages.error(request, "You aren't authorized to do that!")
         return HttpResponseRedirect('/')
     events = o.events.order_by('-date_start')
@@ -68,7 +68,7 @@ def org_new(request):
         if request.method == "GET":
             return render(request, 'main/org_new.html')
         else:
-            o = Organization(admin=request.user)
+            o = Organization(admin_id=request.user.id)
             err = validate_org(request, o)
             if isinstance(err, tuple):
                 return render(request, 'main/org_new.html', {'org': err[1], 'errors': err[0]})
@@ -82,7 +82,7 @@ def org_new(request):
 def org_delete(request, pk):
     o = Organization.objects.get(pk=pk)
     if o:
-        if request.user == o.admin:
+        if request.user.id == o.admin_id:
             o.delete()
             messages.info(request, "Organization successfully deleted")
         else:
@@ -97,7 +97,7 @@ def validate_event(request, e):
     errors = []
     if request.POST.get('organization'):
         o = Organization.objects.get(pk=int(request.POST.get('organization')))
-        if request.user == o.admin:
+        if request.user.id == o.admin_id:
             e.organization = o
         else:
             errors.append("You aren't authorized to do that!")
@@ -140,11 +140,22 @@ def validate_event(request, e):
     return True
 
 @login_required
+def event_home(request, pk):
+    e = get_object_or_404(Event.objects, pk=pk)
+    if request.user.id == e.organizer_id:
+        user_statuses = []
+        for u in e.participants.all():
+            user_statuses.append([u, e.confirm_status(u)])
+        return render(request, 'main/event_home.html', {'event': e, 'user_statuses': user_statuses})
+    messages.error(request, "That's not your event!")
+    return HttpResponseRedirect(reverse('main:manage_home'))
+
+@login_required
 def event_new(request):
     if request.method == "GET":
         return render(request, 'main/event_new.html')
     else:
-        e = Event(organizer=request.user)
+        e = Event(organizer_id=request.user.id)
         err = validate_event(request, e)
         if isinstance(err, tuple):
             return render(request, 'main/event_new.html', {'event': err[1], 'errors': err[0]})
@@ -154,7 +165,7 @@ def event_new(request):
 @login_required
 def event_edit(request, pk):
     e = get_object_or_404(Event.objects, pk=pk)
-    if not request.user == e.organizer:
+    if not request.user.id == e.organizer_id:
         messages.error(request, "You aren't authorized to do that!")
         return HttpResponseRedirect(reverse('main:manage_home'))
     if request.method == "GET":
@@ -170,7 +181,7 @@ def event_edit(request, pk):
 def event_delete(request, pk):
     e = Event.objects.get(pk=pk)
     if e:
-        if request.user == e.organizer:
+        if request.user.id == e.organizer_id:
             e.delete()
             messages.info(request, "Event successfully deleted")
         else:
