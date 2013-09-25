@@ -74,6 +74,11 @@
         <label for="timezone-field">Timezone</label>
         <select name="timezone" id="timezone-field" class="form-control input-block-level">
           <option value="">-</option>
+          <option value="America/New_York">America/New_York (Eastern)</option>
+          <option value="America/Chicago">America/Chicago (Central)</option>
+          <option value="America/Denver">America/Denver (Mountain)</option>
+          <option value="America/Los_Angeles">America/Los_Angeles (Pacific)</option>
+          <option value="">------------</option>
           {% for tz in timezones %}
             <option value="{{tz}}">{{tz}}</option>
           {% endfor %}

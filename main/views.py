@@ -23,7 +23,7 @@ def list_events_one(request):
 def list_events(request, page):
     filter_dict, filters = {}, {}
     if request.GET.get('range'):
-        if not request.user.is_anonymous:
+        if not request.user.is_anonymous():
             if request.user.user_profile.geo_lat:
                 dist = request.GET.get('range')
                 set = Event.objects.within(request.user.user_profile, float(dist))
@@ -32,7 +32,7 @@ def list_events(request, page):
                     mi = ' mile'
                 else:
                     mi = ' miles'
-                filters['Search radius: ' + request.GET.get('range') + mi] = 'range=' + dist
+                filters['Search radius: ' + str(dist) + mi] = 'range=' + dist
             else:
                 messages.error(request, "You don't have a location set! <a href='/profile/change_loc?next=" + reverse('main:list_events') + "'>Set one now</a>",
                                extra_tags='safe')

@@ -11,6 +11,7 @@ import datetime
 
 ConfirmTuple = namedtuple('ConfirmTuple', 'status row_class button_class button_text')
 
+"""
 def distance(p1_lat, p1_long, p2_lat, p2_long):
         # calculates the distance between p1 and p2
         multiplier = 3959  # for miles
@@ -23,14 +24,7 @@ def distance(p1_lat, p1_long, p2_lat, p2_long):
                     sin(radians(p1_lat)) * sin(radians(p2_lat))
                 )
             )
-
-from django.dispatch import receiver
-from django.db.backends.signals import connection_created
-
-@receiver(connection_created)
-def setup_proximity_func(connection, **kwargs):
-    # add the proximity function to sqlite
-    connection.connection.create_function("distance", 4, distance)
+"""
 
 class Organization(models.Model):
     def __str__(self):
@@ -64,12 +58,15 @@ class Organization(models.Model):
 
 class EventManager(models.Manager):
     def within(self, location, distance):
-        subquery = 'distance(%(geo_lat)s,%(geo_lon)s,main_event.geo_lat,main_event.geo_lon) ' % location.__dict__
-        condition = 'proximity < %s' % distance
-        order = 'date_end'
-        query = self.extra(select={'proximity':subquery},
-                          where=[condition], order_by=[order])
-        return query
+        lat_upper = location.geo_lat + (distance / 69)
+        lat_lower = location.geo_lat - (distance / 69)
+        lon_upper = location.geo_lon + (distance / 69)
+        lon_lower = location.geo_lon - (distance / 69)
+        set = self.filter(geo_lat__lt=lat_upper,
+                          geo_lat__gt=lat_lower,
+                          geo_lon__lt=lon_upper,
+                          geo_lon__gt=lon_lower)
+        return set
 
 class Event(models.Model):
     def __str__(self):
