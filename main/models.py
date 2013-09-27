@@ -11,8 +11,7 @@ import datetime
 
 ConfirmTuple = namedtuple('ConfirmTuple', 'status row_class button_class button_text')
 
-"""
-def distance(p1_lat, p1_long, p2_lat, p2_long):
+def haversin(p1_lat, p1_long, p2_lat, p2_long):
         # calculates the distance between p1 and p2
         multiplier = 3959  # for miles
         if p1_lat and p1_long and p2_lat and p2_long:
@@ -24,7 +23,6 @@ def distance(p1_lat, p1_long, p2_lat, p2_long):
                     sin(radians(p1_lat)) * sin(radians(p2_lat))
                 )
             )
-"""
 
 class Organization(models.Model):
     def __str__(self):
@@ -57,15 +55,23 @@ class Organization(models.Model):
     geo_lon = models.FloatField(blank=True, null=True)
 
 class EventManager(models.Manager):
-    def within(self, location, distance):
-        lat_upper = location.geo_lat + (distance / 69)
-        lat_lower = location.geo_lat - (distance / 69)
-        lon_upper = location.geo_lon + (distance / 69)
-        lon_lower = location.geo_lon - (distance / 69)
+    def within(self, location, distance, upcoming=True):
+        loc_lat, loc_lon = location.geo_lat, location.geo_lon
+        lat_upper = loc_lat + (distance / 69)
+        lat_lower = loc_lat - (distance / 69)
+        lon_upper = loc_lon + (distance / 69)
+        lon_lower = loc_lon - (distance / 69)
         set = self.filter(geo_lat__lt=lat_upper,
                           geo_lat__gt=lat_lower,
                           geo_lon__lt=lon_upper,
                           geo_lon__gt=lon_lower)
+        if upcoming:
+            set = set.filter(date_end__gt=timezone.now())
+        exclude_list = []
+        for i in set.all():
+            if haversin(loc_lat, loc_lon, i.geo_lat, i.geo_lon) > distance:
+                exclude_list.append(i.id)
+        set = set.exclude(id__in=exclude_list)
         return set
 
 class Event(models.Model):

@@ -49,3 +49,10 @@
     color: #3cf; }
   .social-link .icon-github-sign:hover {
     color: #333; }
+
+.center {
+  margin: 0 auto; }
+
+.button-div {
+  text-align: center;
+  margin-top: 5px; }
