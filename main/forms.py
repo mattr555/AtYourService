@@ -99,3 +99,19 @@ class EventCreate(forms.ModelForm):
         if date_start > date_end:
             raise forms.ValidationError("The start date should be before the end date!")
         return date_end
+
+class OrganizationCreate(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ('name', 'description', 'location', 'geo_lat', 'geo_lon')
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(OrganizationCreate, self).__init__(*args, **kwargs)
+        self._user = user
+
+    def save(self, commit=True):
+        o = super(OrganizationCreate, self).save(commit=False)
+        o.admin = self._user
+        if commit:
+            o.save()
+        return o

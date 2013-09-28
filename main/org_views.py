@@ -8,7 +8,7 @@ import datetime
 import pytz
 
 from main.models import Organization, Event
-from main.forms import EventCreate
+from main.forms import EventCreate, OrganizationCreate
 
 @login_required
 def manage_home(request):
@@ -26,6 +26,7 @@ def org_home(request, pk):
     events = o.events.order_by('-date_start')
     return render(request, 'main/org_home.html', {'org': o, 'events': events})
 
+"""
 def validate_org(request, o):
     errors = []
     if request.POST.get('name'):
@@ -47,6 +48,7 @@ def validate_org(request, o):
         return (errors, o)
     o.save()
     return True
+"""
 
 @login_required
 def org_edit(request, pk):
@@ -55,13 +57,18 @@ def org_edit(request, pk):
         messages.error(request, "That's not your organization!")
         return HttpResponseRedirect(reverse('main:org_manage'))
     if request.method == "GET":
-        return render(request, 'main/org_edit.html', {'org': o})
+        form = OrganizationCreate(data=o.__dict__, user=request.user)
+        return render(request, 'main/org_edit.html', {'org': form})
     else:
-        err = validate_org(request, o)
-        if isinstance(err, tuple):
-            return render(request, 'main/org_edit.html', {'org': err[1], 'errors': err[0]})
-        messages.success(request, 'Organization successfully edited')
-        return HttpResponseRedirect(reverse('main:manage_home'))
+        form = OrganizationCreate(data=request.POST, user=request.user)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                o.__dict__[k] = v
+            o.save()
+            messages.success(request, 'Organization successfully edited')
+            return HttpResponseRedirect(reverse('main:org_home', args=(str(o.id))))
+        else:
+            return render(request, 'main/org_edit.html', {'org': form, 'errors': form.errors})
 
 @login_required
 def org_new(request):
@@ -69,12 +76,13 @@ def org_new(request):
         if request.method == "GET":
             return render(request, 'main/org_new.html')
         else:
-            o = Organization(admin_id=request.user.id)
-            err = validate_org(request, o)
-            if isinstance(err, tuple):
-                return render(request, 'main/org_new.html', {'org': err[1], 'errors': err[0]})
-            messages.success(request, 'Organization successfully created')
-            return HttpResponseRedirect(reverse('main:manage_home'))
+            form = OrganizationCreate(user=request.user, data=request.POST)
+            if form.is_valid():
+                o = form.save()
+                messages.success(request, 'Organization successfully created')
+                return HttpResponseRedirect(reverse('main:org_home', args=(str(o.id))))
+            else:
+                return render(request, 'main/org_new.html', {'org': form, 'errors': form.errors})
     else:
         messages.error(request, "You aren't an organization administrator!")
         return HttpResponseRedirect('/')
