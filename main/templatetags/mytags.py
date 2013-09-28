@@ -72,3 +72,7 @@ def is_org_admin(u):
 @register.filter
 def is_volunteer(u):
     return u.groups.filter(name="Volunteer").count() > 0
+
+@register.filter
+def date_value(date):
+    return date.strftime('%m/%d/%Y %I:%M %p')

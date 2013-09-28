@@ -8,8 +8,8 @@
 	<div style="background-color:#f2dede;border-radius:5px;">
 		<h4 style="margin-left:10px">Oh noes!</h4>
 		<ul>
-		{% for error in errors %}
-			<li>{{error}}</li>
+		{% for field, error in errors.items %}
+			<li>{{field}}- {{error}}</li>
 		{% endfor %}
 		</ul>
 	</div>
@@ -27,26 +27,26 @@
 		</div>
 		<div class="form-group">
 			<label for="name-field">Name</label>
-			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name}}">
+			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name.value}}">
 		</div>
 		<div class="form-group">
 			<label for="description-field">Description</label>
-			<textarea class="form-control" id="description-field" rows="3" name="description">{{event.description}}</textarea>
+			<textarea class="form-control" id="description-field" rows="3" name="description">{{event.description.value}}</textarea>
 		</div>
 		<div class="form-group">
 			<label for="date-start-field">Start date/time</label>
-			<input type="text" class="form-control" id="date-start-field" name="date-start" {%if event.date_start%}value="{{event.date_start_input}}"{%endif%} placeholder="MM/DD/YY HH:MM AM/PM">
+			<input type="text" class="form-control" id="date-start-field" name="date_start" value="{{event.date_start.value}}" placeholder="MM/DD/YY HH:MM AM/PM">
 		</div>
 		<div class="form-group">
 			<label for="date-end-field">End date/time</label>
-			<input type="text" class="form-control" id="date-end-field" name="date-end" {%if event.date_end%}value="{{event.date_end_input}}"{%endif%} placeholder="MM/DD/YY HH:MM AM/PM">
+			<input type="text" class="form-control" id="date-end-field" name="date_end" value="{{event.date_end.value}}" placeholder="MM/DD/YY HH:MM AM/PM">
 		</div>
 		<div class="form-group">
 			<label for="location-field">Location</label>
-			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location}}">
+			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location.value}}">
 		</div>
-		<input type="hidden" id="lat-field" name="lat">
-		<input type="hidden" id="lon-field" name="lon">
+		<input type="hidden" id="lat-field" name="geo_lat" value="{{event.geo_lat.value}}">
+		<input type="hidden" id="lon-field" name="geo_lon" value="{{event.geo_lon.value}}">
 	</form>
 	<div class="pull-right"><a id="lookup-address" class="btn btn-primary">Lookup location</a></div><br>
 	<div id="map" style="margin-top:40px"></div>
@@ -61,9 +61,9 @@
 	$(document).ready(function(){
 		map = new GMaps({
 			div: '#map',
-			{% if event.geo_lat %}
-			lat: {{event.geo_lat}},
-			lng: {{event.geo_lon}},
+			{% if event.geo_lat.value %}
+			lat: {{event.geo_lat.value}},
+			lng: {{event.geo_lon.value}},
 			zoom: 10,
 			{% else %}
 			lat: 39.828,
@@ -73,10 +73,10 @@
 			
 		})
 
-		{% if event.geo_lat %}
+		{% if event.geo_lat.value %}
 		map.addMarker({
-			lat: {{event.geo_lat}},
-			lng: {{event.geo_lon}}
+			lat: {{event.geo_lat.value}},
+			lng: {{event.geo_lon.value}}
 		})
 		{% endif %}
 

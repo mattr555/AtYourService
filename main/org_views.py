@@ -8,6 +8,7 @@ import datetime
 import pytz
 
 from main.models import Organization, Event
+from main.forms import EventCreate
 
 @login_required
 def manage_home(request):
@@ -93,52 +94,6 @@ def org_delete(request, pk):
         return HttpResponseRedirect(request.GET.get('next'))
     return HttpResponseRedirect('/')
 
-def validate_event(request, e):
-    errors = []
-    if request.POST.get('organization'):
-        o = Organization.objects.get(pk=int(request.POST.get('organization')))
-        if request.user.id == o.admin_id:
-            e.organization = o
-        else:
-            errors.append("You aren't authorized to do that!")
-    else:
-        errors.append("An organization is required")
-    if request.POST.get('name'):
-        e.name = request.POST.get('name')
-    else:
-        errors.append('A name is required')
-    if request.POST.get('description'):
-        e.description = request.POST.get('description')
-    else:
-        errors.append('A description is required')
-    if request.POST.get('location'):
-        e.location = request.POST.get('location')
-    else:
-        errors.append('A location is required')
-    if request.POST.get('date-start'):
-        naive = datetime.datetime.strptime(request.POST.get('date-start'), '%m/%d/%y %I:%M %p')
-        tz = pytz.timezone(request.user.user_profile.timezone)
-        e.date_start = tz.localize(naive)
-    else:
-        errors.append('A start date is required')
-    if request.POST.get('date-end'):
-        naive = datetime.datetime.strptime(request.POST.get('date-end'), '%m/%d/%y %I:%M %p')
-        tz = pytz.timezone(request.user.user_profile.timezone)
-        e.date_end = tz.localize(naive)
-    else:
-        errors.append('An end date is required')
-    if request.POST.get('lat'):
-        e.geo_lat = float(request.POST.get('lat'))
-        e.geo_lon = float(request.POST.get('lon'))
-    if errors:
-        return (errors, e)
-    try:
-        e.save()
-    except Exception as err:
-        errors.append(repr(err))
-        return (errors, e)
-    return True
-
 @login_required
 def event_home(request, pk):
     e = get_object_or_404(Event.objects, pk=pk)
@@ -155,12 +110,13 @@ def event_new(request):
     if request.method == "GET":
         return render(request, 'main/event_new.html')
     else:
-        e = Event(organizer_id=request.user.id)
-        err = validate_event(request, e)
-        if isinstance(err, tuple):
-            return render(request, 'main/event_new.html', {'event': err[1], 'errors': err[0]})
-        messages.success(request, 'Event created successfully')
-        return HttpResponseRedirect(reverse('main:org_home', args=(request.POST.get('organization'))))
+        form = EventCreate(user=request.user, data=request.POST)
+        if form.is_valid():
+            e = form.save()
+            messages.success(request, 'Event created successfully')
+            return HttpResponseRedirect(reverse('main:event_home', args=(e.id)))
+        else:
+            return render(request, 'main/event_new.html', {'errors': form.errors, 'event': form})
 
 @login_required
 def event_edit(request, pk):
@@ -169,13 +125,21 @@ def event_edit(request, pk):
         messages.error(request, "You aren't authorized to do that!")
         return HttpResponseRedirect(reverse('main:manage_home'))
     if request.method == "GET":
-        return render(request, 'main/event_edit.html', {'event': e})
+        form = EventCreate(data=e.__dict__, user=request.user)
+        return render(request, 'main/event_edit.html', {'event': form})
     else:
-        err = validate_event(request, e)
-        if isinstance(err, tuple):
-            return render(request, 'main/event_edit.html', {'event': err[1], 'errors': err[0]})
-        messages.success(request, 'Event created successfully')
-        return HttpResponseRedirect(reverse('main:org_home', args=(request.POST.get('organization'))))
+        data_dict = request.POST.dict()
+        data_dict['organization'] = e.organization_id
+        form = EventCreate(data=data_dict, user=request.user)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                if k != 'organization':
+                    e.__dict__[k] = v
+            e.save()
+            messages.success(request, 'Event edited successfully')
+            return HttpResponseRedirect(reverse('main:event_home', args=(str(e.id))))
+        else:
+            return render(request, 'main/event_edit.html', {'event': form, 'errors': form.errors})
 
 @login_required
 def event_delete(request, pk):
