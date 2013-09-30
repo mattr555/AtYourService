@@ -26,30 +26,6 @@ def org_home(request, pk):
     events = o.events.order_by('-date_start')
     return render(request, 'main/org_home.html', {'org': o, 'events': events})
 
-"""
-def validate_org(request, o):
-    errors = []
-    if request.POST.get('name'):
-        o.name = request.POST.get('name')
-    else:
-        errors.append('A name is required')
-    if request.POST.get('description'):
-        o.description = request.POST.get('description')
-    else:
-        errors.append('A description is required')
-    if request.POST.get('location'):
-        o.location = request.POST.get('location')
-    else:
-        errors.append('A location is required')
-    if request.POST.get('lat'):
-        o.geo_lat = float(request.POST.get('lat'))
-        o.geo_lon = float(request.POST.get('lon'))
-    if errors:
-        return (errors, o)
-    o.save()
-    return True
-"""
-
 @login_required
 def org_edit(request, pk):
     o = get_object_or_404(Organization.objects, pk=pk)
@@ -163,4 +139,3 @@ def event_delete(request, pk):
     if request.GET.get('next'):
         return HttpResponseRedirect(request.GET.get('next'))
     return HttpResponseRedirect('/')
-

@@ -1,0 +1,11 @@
+Hello,
+
+You or someone with your email address has signed up for AtYourService.
+To validate this email address, follow the link below:
+
+http://{{site.domain}}profile/email_validation/{{validation_key}}/
+
+If you did not request this, you can safely ignore this email.
+
+Thanks,
+AtYourService Team
