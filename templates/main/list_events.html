@@ -43,11 +43,11 @@
 		</div>
 		<div class="button-div" class="col-lg-2 pull-right">
 			{% if request.user == event.organizer %}
-			<button class='btn btn-info commit-button pull-right disabled' data-id={{event.id}}>Organizing</button>
+			<button class='btn btn-info commit-button disabled' data-id={{event.id}}>Organizing</button>
 			{% elif request.user in event.participants.all %}
-			<button class='btn btn-success commit-button pull-right commit-disabled disabled' data-id={{event.id}}>Participating</button>
+			<button class='btn btn-success commit-button commit-disabled disabled' data-id={{event.id}}>Participating</button>
 			{%else%}
-			<button class='btn btn-primary commit-button pull-right commit-active' data-id={{event.id}}>Do this event!</button>
+			<button class='btn btn-primary commit-button commit-active' data-id={{event.id}}>Do this event!</button>
 			{%endif%}
 		</div>
 	</div>

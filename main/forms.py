@@ -12,7 +12,7 @@ class MyUserCreate(UserCreationForm):
     last_name = forms.CharField(required=True)
     volunteer = forms.BooleanField(required=False)
     org_admin = forms.BooleanField(required=False)
-    timezone = forms.ChoiceField(required=True)
+    timezone = forms.ChoiceField(required=True, choices=[(i, i) for i in pytz.common_timezones])
 
     class Meta:
         fields = ('first_name', 'last_name', 'email', 'volunteer', 'org_admin', 'timezone',)

@@ -86,9 +86,9 @@ def email_validation(request, key):
             profile.email_valid = True
             profile.email_validation_key = ""
             profile.save()
-            messages.success(request, 'Email validated successfully')
+            messages.success(request, 'Email verified successfully')
         else:
-            messages.error(request, 'That validation key is incorrect :/')
+            messages.error(request, 'That verification key is incorrect :/')
     else:
         messages.info(request, 'Your email is already valid!')
     return HttpResponseRedirect(reverse('main:user_profile'))

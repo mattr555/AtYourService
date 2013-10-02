@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url(r'^profile/reset_pass/complete/$', user_views.finish_change_pass),
     url(r'^profile/change_pass/complete/$', user_views.finish_change_pass),
     url(r'^profile/$', user_views.user_profile, name='user_profile'),
-    url(r'^profile/email_validation/(?P<key>\[a-zA-Z]{20})/$', user_views.email_validation, name='email_validation'),
+    url(r'^profile/email_validation/(?P<key>[a-zA-Z]{20})/$', user_views.email_validation, name='email_validation'),
 
     # organization management
     url(r'^manage/$', org_views.manage_home, name='manage_home'),
