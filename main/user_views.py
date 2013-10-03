@@ -53,8 +53,9 @@ def signup(request):
                       'noreply@atyourservice.com',
                       [u.email])
             return HttpResponseRedirect('/')
-        return render(request, 'main/signup.html', {'errors': form.errors, 'timezones': pytz.common_timezones})
-    return render(request, 'main/signup.html', {'timezones': pytz.common_timezones})
+        return render(request, 'main/signup.html', {'errors': form.errors, 'timezones': pytz.common_timezones, 'form': form})
+    form = MyUserCreate()
+    return render(request, 'main/signup.html', {'timezones': pytz.common_timezones, 'form': form})
 
 @login_required
 def change_location(request):

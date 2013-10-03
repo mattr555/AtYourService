@@ -65,12 +65,12 @@
       <form class="form-signin" _lpchecked="1" action="" method="post">
         {%csrf_token%}
         <h2 class="form-signin-heading">Please sign up</h2>
-        <input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="username">
+        <input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="username" value="{{form.username.value}}">
         <input type="password" class="input-block-level form-control" placeholder="Password" name="password1">
         <input type="password" class="input-block-level form-control" placeholder="Confirm password" name="password2">
-        <input type="text" class="input-block-level form-control" placeholder="First name" name="first_name">
-        <input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name">
-        <input type="text" class="input-block-level form-control" placeholder="Email" name="email">
+        <input type="text" class="input-block-level form-control" placeholder="First name" name="first_name" value="{{form.first_name.value}}">
+        <input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name" value="{{form.last_name.value}}">
+        <input type="text" class="input-block-level form-control" placeholder="Email" name="email" value="{{form.email.value}}">
         <label for="timezone-field">Timezone</label>
         <select name="timezone" id="timezone-field" class="form-control input-block-level">
           <option value="">-</option>
