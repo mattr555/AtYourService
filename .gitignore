@@ -44,3 +44,7 @@ dev_settings.py
 **/migrations
 
 .settings/
+.idea/
+
+*.sublime-project
+*.sublime-workspace

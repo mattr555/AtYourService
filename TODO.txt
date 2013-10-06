@@ -1,5 +1,4 @@
 What should happen before a 0.1 release:
-	Email validation
 
 What should happen before a 0.9 (closed beta) release:
 	Django admin page
@@ -22,3 +21,4 @@ Done:
 	Organization manipulation
 	Adding events defined by organization
 	Confirmation of user attendance
+	Email validation

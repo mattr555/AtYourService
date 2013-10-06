@@ -26,7 +26,7 @@ class Command(NoArgsCommand):
         for i in set:
             plaintext = render_to_string('email/event_remind.txt', {'site': site, 'event': i})
             html = render_to_string('email/event_remind.html', {'site': site, 'event': i})
-            recipients = list(map(lambda x: x.email, i.participants.all()))
+            recipients = list(map(lambda x: x.email, i.participants.filter(user_profile__email_valid=True)))
             send_html_mail('Event reminder for {}'.format(i.name),
                            plaintext,
                            html,
