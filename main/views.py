@@ -75,7 +75,7 @@ def list_events(request, page):
     except EmptyPage:
         messages.error(request, "That page was not found!")
         return HttpResponseRedirect('/')
-    if not page_set.object_list:
+    if not page_set.object_list.exists():
         messages.error(request, "No events found!")
     return render(request, 'main/list_events.html', {'events': page_set, 'filters': filters})
 
