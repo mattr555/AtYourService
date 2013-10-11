@@ -41,7 +41,6 @@ nosetests.xml
 *.db
 personal_settings.py
 dev_settings.py
-**/migrations
 
 .settings/
 .idea/
