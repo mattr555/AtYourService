@@ -1,0 +1,39 @@
+/* TEAM */
+	
+	Lead and everyone else: Matthew Ramina
+	Twitter: @mattr555
+	From: Wall, NJ, USA
+
+/* TECHNOLOGIES */
+	
+	Django
+	Python web framework
+	djangoproject.com
+
+	Bootstrap
+	CSS & JS plugins and framework
+	getbootstrap.com
+
+	jQuery
+	DOM API for JS
+	jquery.com
+
+	GMaps.js
+	Sexier Google Maps API
+	hpneo.github.io/gmaps
+
+	sorttable.js
+	Table Sorter
+	kryogenix.org/code/browser/sorttable
+
+	Font Awesome
+	Icons & Glyphs
+	fortawesome.github.io/Font-Awesome
+
+/* SITE */
+	
+	Last Update: ...ongoing
+	Language: English
+	Standards: HTML5, CSS3
+	Doctype: HTML5
+	Software: Eclipse + PyDev, Sublime Text 3

@@ -1,0 +1,78 @@
+{%extends 'main/base.html'%}
+
+{%block title%}Organization details for {{organization.name}}{%endblock%}
+
+{%block content%}
+<div class='row'>
+	<div class='col-lg-10'>
+		<h2>{{organization.name}}</h2>
+		<b>Description: </b>{{organization.description}}<br/>
+		<b>Location: </b>{{organization.location}}<br/>
+		{%if organization.geo_lat%}
+		<div id="map"></div>
+		{%endif%}
+	</div>
+	<div class='button-div col-lg-2'>
+		{% if request.user == organization.admin %}
+		<button class='btn btn-info org-button disabled' data-id={{organization.id}}>Administrator</button>
+		<a href="{%url 'main:org_edit' organization.id%}" class="">Edit</a>
+		{% elif request.user in organization.members.all %}
+		<button class='btn btn-success org-button org-disabled disabled' data-id={{organization.id}}>Member</button>
+		{%else%}
+		<button class='btn btn-primary org-button org-active' data-id={{organization.id}}>Join organization</button>
+		{%endif%}
+	</div>
+</div>
+<div>
+	<h3>Upcoming Events: <small><a href="/list/?organization_id={{organization.pk}}">See all</a></small></h3>
+	{% if recent_events %}
+	{% for event in recent_events %}
+		<div class="list-event row">
+			<div class="col-lg-10">
+				<h3><a href="{%url 'main:event_detail' event.pk%}">{{event.name}}</a></h3>
+				<b>Location: </b>{{event.location}}<br>
+				<b>Time: </b>{{event.date_start}}
+			</div>
+			<div class="button-div" class="col-lg-2 pull-right">
+				{% if request.user == event.organizer %}
+				<button class='btn btn-info commit-button pull-right disabled' data-id={{event.id}}>Organizing</button>
+				{% elif request.user in event.participants.all %}
+				<button class='btn btn-success commit-button pull-right commit-disabled disabled' data-id={{event.id}}>Participating</button>
+				{%else%}
+				<button class='btn btn-primary commit-button pull-right commit-active' data-id={{event.id}}>Do this event!</button>
+				{%endif%}
+			</div>
+		</div>
+	{%endfor%}
+	{% else %}
+	<p>No upcoming events!</p>
+	{% endif %}
+</div>
+{%endblock%}
+
+{%block scripts%}
+<script src='/static/js/event_button.js'></script>
+<script src='/static/js/org_button.js'></script>
+<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.4/gmaps.min.js'></script>
+<script>
+$(document).ready(function(){
+	$('#browse-link').parent().addClass('active')
+
+	{% if organization.geo_lat %}
+	map = new GMaps({
+		div: '#map',
+		lat: {{organization.geo_lat}},
+		lng: {{organization.geo_lon}},
+		zoom: 10,	
+					
+	})
+
+	map.addMarker({
+	 	lat: {{organization.geo_lat}},
+	 	lng: {{organization.geo_lon}}
+	})
+	{% endif %}	
+})
+</script>
+{%endblock%}

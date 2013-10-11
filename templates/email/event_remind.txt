@@ -1,0 +1,4 @@
+This is a reminder from AtYourService:
+You have scheduled an event, {{event.name}}, with {{event.organization.name}} for {{event.date_start}}.
+Click below for details:
+http://{{site.domain}}{{event.detail_url}}

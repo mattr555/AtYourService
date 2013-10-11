@@ -1,0 +1,64 @@
+{%extends 'main/base.html'%}
+{%load mytags%}
+
+{%block title%}Event details for {{event.name}}{%endblock%}
+
+{%block content%}
+<div class='row-fluid'>
+	<div class='col-lg-10'>
+		<h2>{{event.name}}</h2>
+		<h4><a href="{{event.organization.detail_url}}">{{event.organization}}</a></h4>
+		{{event.date_start}} to {{event.date_end}}<br/>
+		<b>Hours: </b>{{event.hours}}<br/>
+		<b>Organized by: </b>{{event.organizer.get_full_name}}<br/>
+		<b>Description: </b>{{event.description}}<br/>
+		<b>User Status: </b><span class='{% if event|args:request.user|call:"status" == "User-created Event" or event|args:request.user|call:"status" == "Confirmed"%}text-success{%elif event|args:request.user|call:"status" == "Unconfirmed"%}text-warning{%endif%}' id='user-status'>{{event|args:request.user|call:"status"}}</span>
+		<hr/>
+		<b>Location: </b>{{event.location}}<br/>
+		{%if event.geo_lat%}
+		<div id="map"></div>
+		{%endif%}
+	</div>
+	<div class='button-div col-lg-2'>	
+		{% if request.user == event.organizer %}
+		<a class='btn btn-info commit-button center disabled' data-id={{event.id}}>Organizing</a>
+		<a href="{%url 'main:event_home' event.id%}">Edit</a>
+		{% elif request.user in event.participants.all %}
+		<a class='btn btn-success commit-button center commit-disabled disabled' data-id={{event.id}}>Participating</a>
+		{%else%}
+		<a class='btn btn-primary commit-button center commit-active' data-id={{event.id}}>Do this event!</a>
+		{%endif%}
+	</div>
+</div>
+
+{%endblock%}
+
+{%block scripts%}
+<script src='http://maps.google.com/maps/api/js?sensor=false'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.4/gmaps.min.js'></script>
+<script>
+$(document).ready(function(){
+	$('#browse-link').parent().addClass('active');
+
+	var login_link = "{%url 'main:login'%}";
+
+	{% if event.geo_lat %}
+
+	map = new GMaps({
+		div: '#map',
+		lat: {{event.geo_lat}},
+		lng: {{event.geo_lon}},
+		zoom: 12,
+	});
+
+	map.addMarker({
+		lat: {{event.geo_lat}},
+		lng: {{event.geo_lon}},
+		title: "{{event.location}}",
+	})
+
+	{%endif%}
+})
+</script>
+<script src='/static/js/event_button.js'></script>
+{%endblock%}

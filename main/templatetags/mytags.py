@@ -64,3 +64,15 @@ def args(obj, arg):
 
 register.filter("call", callMethod)
 register.filter("args", args)
+
+@register.filter
+def is_org_admin(u):
+    return u.groups.filter(name="Org_Admin").count() > 0
+
+@register.filter
+def is_volunteer(u):
+    return u.groups.filter(name="Volunteer").count() > 0
+
+@register.filter
+def date_value(date):
+    return date.strftime('%m/%d/%Y %I:%M %p')

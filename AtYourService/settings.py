@@ -4,16 +4,13 @@ try:
 except:
     pass
 import os
-from AtYourService.dev_settings import *
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+if DEBUG:
+    from AtYourService.dev_settings import *
+
 from django.contrib import messages
-
-ADMINS = (
-    ('Matthew Ramina', 'splattkid@gmail.com'),
-)
-
-MANAGERS = ADMINS
-
-
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -37,7 +34,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -84,7 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'main.middleware.TimezoneMiddleware',
     'django.middleware.gzip.GZipMiddleware',
 )
 
@@ -109,38 +106,7 @@ INSTALLED_APPS = (
     'south',
     'main',
     'ajax',
-    'widget_tweaks',
-    'bootstrapform',
 )
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
 
 EMAIL_SUBJECT_PREFIX = '[AtYourService] '
 
@@ -159,3 +125,10 @@ LOGIN_URL = '/login/'
 MESSAGE_TAGS = {messages.ERROR: 'alert-danger',
                 messages.INFO: 'alert-info',
                 messages.SUCCESS: 'alert-success', }
+
+SITE_ID = 1
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+from django.conf import global_settings
+DATETIME_INPUT_FORMATS = global_settings.DATETIME_INPUT_FORMATS + ('%m/%d/%y %I:%M %p', '%m/%d/%Y %I:%M %p')
