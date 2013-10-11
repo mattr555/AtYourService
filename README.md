@@ -25,3 +25,16 @@ personal_settings.py
 * `SECRET_KEY`
 * `ADMINS`
 * `MANAGERS`
+
+Changelog
+=========
+
+v0.1.0
+------
+Initial release. Since going on GitHub:
+
+* +User account manipulation
+* +Email notification
+* +Organization manipulation and administration
+* +Confirmation of user attendance
+* +Email verification
