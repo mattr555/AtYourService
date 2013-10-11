@@ -1,5 +1,3 @@
-What should happen before a 0.1 release:
-
 What should happen before a 0.9 (closed beta) release:
 	Django admin page
 	No JOINS
@@ -15,10 +13,11 @@ Other, low priority ideas (1.1/2.0):
 	PDF output
 
 Done:
-	User account manipulation
-	Email notification
-		cron + django.core.mail
-	Organization manipulation
-	Adding events defined by organization
-	Confirmation of user attendance
-	Email validation
+	0.1.0:
+		User account manipulation
+		Email notification
+			cron + django.core.mail
+		Organization manipulation
+		Adding events defined by organization
+		Confirmation of user attendance
+		Email validation
