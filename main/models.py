@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django.core.cache import cache
 
 from geopy import geocoders
 from collections import namedtuple
