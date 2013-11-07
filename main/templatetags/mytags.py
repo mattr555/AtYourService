@@ -67,11 +67,11 @@ register.filter("args", args)
 
 @register.filter
 def is_org_admin(u):
-    return u.groups.filter(name="Org_Admin").count() > 0
+    return u.has_perm('main.add_organization')
 
 @register.filter
 def is_volunteer(u):
-    return u.groups.filter(name="Volunteer").count() > 0
+    return u.has_perm('main.add_userevent')
 
 @register.filter
 def date_value(date):

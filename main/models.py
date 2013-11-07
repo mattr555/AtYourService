@@ -208,10 +208,10 @@ class UserProfile(models.Model):
             pass
 
     def is_org_admin(self):
-        return self.user.groups.filter(name="Org_Admin").count() > 0
-
+        return self.user.has_perm('main.add_organization')
+        
     def is_volunteer(self):
-        return self.user.groups.filter(name="Volunteer").count() > 0
+        return self.user.has_perm('main.add_userevent')
 
     user = models.OneToOneField(User, unique=True, related_name='user_profile')
     geo_lat = models.FloatField(blank=True, null=True)

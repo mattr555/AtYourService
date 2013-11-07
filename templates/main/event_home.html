@@ -5,7 +5,7 @@
 
 {% block content %}
 	<h2>Managing {{event.name}}</h2>
-	<div class="pull-right"><a href="{%url 'main:event_edit' event.id%}" class="btn btn-primary"><i class="icon-pencil"></i> Edit Event</a></div>
+	<div class="pull-right"><a href="{%url 'main:event_edit' event.id%}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit Event</a></div>
 	<p><b>Start time:</b> {{event.date_start}}</p>
 	<p><b>End time:</b> {{event.date_end}}</p>
 	<p><b>Location:</b> {{event.location}}</p>
