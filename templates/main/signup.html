@@ -32,13 +32,13 @@
 			.form-signin .checkbox {
 				margin-bottom: 10px;
 			}
-			.form-signin input[type="text"],
+			/*.form-signin input[type="text"],
 			.form-signin input[type="password"] {
 				font-size: 16px;
 				height: auto;
 				margin-bottom: 15px;
 				padding: 7px 9px;
-			}
+			}*/
 
 		</style>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
@@ -65,24 +65,45 @@
 			<form class="form-signin" _lpchecked="1" action="" method="post">
 				{%csrf_token%}
 				<h2 class="form-signin-heading">Please sign up</h2>
-				<input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="username" {% if form.username.value %}value="{{form.username.value}}"{% endif %}>
-				<input type="password" class="input-block-level form-control" placeholder="Password" name="password1">
-				<input type="password" class="input-block-level form-control" placeholder="Confirm password" name="password2">
-				<input type="text" class="input-block-level form-control" placeholder="First name" name="first_name" {% if form.first_name.value %}value="{{form.first_name.value}}"{%endif%}>
-				<input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name" {% if form.last_name.value %}value="{{form.last_name.value}}"{%endif%}>
-				<input type="text" class="input-block-level form-control" placeholder="Email" name="email" {% if form.email.value %}value="{{form.email.value}}"{%endif%}>
-				<label for="timezone-field">Timezone</label>
-				<select name="timezone" id="timezone-field" class="form-control input-block-level">
-					<option value="">-</option>
-					<option value="America/New_York">America/New_York (Eastern)</option>
-					<option value="America/Chicago">America/Chicago (Central)</option>
-					<option value="America/Denver">America/Denver (Mountain)</option>
-					<option value="America/Los_Angeles">America/Los_Angeles (Pacific)</option>
-					<option value="">------------</option>
-					{% for tz in timezones %}
-						<option value="{{tz}}">{{tz}}</option>
-					{% endfor %}
-				</select>
+				<div class="form-group">
+					<input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="username" {% if form.username.value %}value="{{form.username.value}}"{% endif %}>
+					<span class="help-block" id="username-help"></span>
+				</div>
+				<div class="form-group">
+					<input type="password" class="input-block-level form-control" placeholder="Password" name="password1">
+					<span class="help-block"></span>
+				</div>
+				<div class="form-group">
+					<input type="password" class="input-block-level form-control" placeholder="Confirm password" name="password2">
+					<span class="help-block" id="password-help"></span>
+				</div>
+				<div class="form-group">
+					<input type="text" class="input-block-level form-control" placeholder="First name" name="first_name" {% if form.first_name.value %}value="{{form.first_name.value}}"{%endif%}>
+					<span class="help-block" id="password-help"></span>
+				</div>
+				<div class="form-group">
+					<input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name" {% if form.last_name.value %}value="{{form.last_name.value}}"{%endif%}>
+					<span class="help-block" id="password-help"></span>
+				</div>
+				<div class="form-group">
+					<input type="text" class="input-block-level form-control" placeholder="Email" name="email" {% if form.email.value %}value="{{form.email.value}}"{%endif%}>
+					<span class="help-block" id="password-help"></span>
+				</div>
+				<div class="form-group">
+					<label for="timezone-field">Timezone</label>
+					<select name="timezone" id="timezone-field" class="form-control input-block-level">
+						<option value="">-</option>
+						<option value="America/New_York">America/New_York (Eastern)</option>
+						<option value="America/Chicago">America/Chicago (Central)</option>
+						<option value="America/Denver">America/Denver (Mountain)</option>
+						<option value="America/Los_Angeles">America/Los_Angeles (Pacific)</option>
+						<option value="">------------</option>
+						{% for tz in timezones %}
+							<option value="{{tz}}">{{tz}}</option>
+						{% endfor %}
+					</select>
+					<span class="help-block" id="password-help"></span>
+				</div>
 				<label class="checkbox">
 					<input type="checkbox" name="volunteer" checked="checked">
 					I am a volunteer who wants to track hours
@@ -110,5 +131,6 @@
 				$('.alert').alert();
 			})
 		</script>
-
+		<script src="/static/js/AjaxCSRF.js"></script>
+		<script src="/static/js/signup_validation.js"></script>
 </body></html>

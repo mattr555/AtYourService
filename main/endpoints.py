@@ -85,3 +85,12 @@ def unconfirm_participant(request):
                 'button_text': status.button_text}
     else:
         raise AJAXError(403, "User must be event organizer")
+
+def username_valid(request):
+    if request.POST.get('username', ''):
+        try:
+            u = User.objects.get(username=request.POST.get('username'))
+            return {'message': 'This username is in use', 'valid': False}
+        except User.DoesNotExist:
+            return {'message': 'This username is valid', 'valid': True}
+    return {'message': 'Please enter a value', 'valid': False}
