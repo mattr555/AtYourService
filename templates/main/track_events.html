@@ -20,7 +20,12 @@
 					
 					<div class="form-group">
 						<label for="name-field">Name</label>
-						<input type="text" class="form-control" id="name-field" name="name" {%if form.name.value%}value="{{form.name.value}}"{%endif%}>
+						<input type="text" class="form-control" id="name-field" name="name" {%if form.name.value%}value="{{form.name.value}}"{%endif%} required>
+					</div>
+
+					<div class="form-group">
+						<label for="org-field">Organization</label>
+						<input type="text" class="form-control" id="org-field" name="organization" {%if form.organization.value%}value="{{form.organization.value}}"{%endif%} required>
 					</div>
 					
 					<div class="form-group">
@@ -30,7 +35,7 @@
 					
 					<div class="form-group">
 						<label for="date_start-field">Date start</label>
-						<input type="text" class="form-control" id="date_start-field" name="date_start" placeholder="MM/DD/YY HH:MM AM/PM" {%if form.date_start.value%}value="{{form.date_start.value}}"{%endif%}>
+						<input type="text" class="form-control" id="date_start-field" name="date_start" placeholder="MM/DD/YY HH:MM AM/PM" {%if form.date_start.value%}value="{{form.date_start.value}}"{%endif%} required>
 					</div>
 					
 					<div class="form-group">
@@ -40,12 +45,12 @@
 					
 					<div class="form-group">
 						<label for="location-field">Location</label>
-						<input type="text" class="form-control" id="location-field" name="location" {%if form.location.value%}value="{{form.location.value}}"{%endif%}>
+						<input type="text" class="form-control" id="location-field" name="location" {%if form.location.value%}value="{{form.location.value}}"{%endif%} required>
 					</div>
 					
 					<div class="form-group">
 						<label for="hours_worked-field">Hours worked</label>
-						<input type="text" class="form-control" id="hours_worked-field" name="hours_worked" {%if form.hours_worked.value%}value="{{form.hours_worked.value}}"{%endif%}>
+						<input type="text" class="form-control" id="hours_worked-field" name="hours_worked" {%if form.hours_worked.value%}value="{{form.hours_worked.value}}"{%endif%} required>
 					</div>
 				</form>
 			</div>

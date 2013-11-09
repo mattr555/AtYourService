@@ -14,6 +14,7 @@
 	<link rel="author" href="/humans.txt"/>
 </head>
 <body>
+<div id="wrap">
 	{% cache 60 navbar request.user.username %}
 	{# make cache length longer in production #}
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -27,15 +28,17 @@
 				<a class="navbar-brand" href="{%url 'main:home'%}">AtYourService</a>
 			</div>
 			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse</a></li>
-					{% if request.user|is_volunteer %}
-						<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
-					{%endif%}
-					{% if request.user|is_org_admin %}
-						<li><a id="admin-link" href="{%url 'main:manage_home'%}">Manage Organizations</a></li>
-					{%endif%}
-				</ul>
+				<nav>
+					<ul class="nav navbar-nav">
+						<li><a id="browse-link" href="{%url 'main:list_events'%}?range=20">Browse</a></li>
+						{% if request.user|is_volunteer %}
+							<li><a id="track-link" href="{%url 'main:track'%}">Track Hours</a></li>
+						{%endif%}
+						{% if request.user|is_org_admin %}
+							<li><a id="admin-link" href="{%url 'main:manage_home'%}">Manage Organizations</a></li>
+						{%endif%}
+					</ul>
+				</nav>
 				{%if request.user.id%}
 					<p class="pull-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
 				{%else%}
@@ -65,12 +68,14 @@
 		Viral bitters YOLO VHS selvage stumptown.  Small batch before they sold out pickled tote bag, semiotics brunch YOLO 90's church-key.  Before they sold out authentic fixie, photo booth flexitarian post-ironic put a bird on it 90's Marfa try-hard iPhone.  Deep v banh mi Godard, sartorial occupy quinoa drinking vinegar butcher four loko chillwave.  Thundercats Wes Anderson salvia, Tonx letterpress trust fund literally asymmetrical Cosby sweater irony tousled messenger bag.  Ethical squid church-key Vice, plaid Godard actually polaroid food truck kale chips you probably haven't heard of them sustainable authentic.  McSweeney's 8-bit kogi lomo PBR&amp;B, you probably haven't heard of them hashtag keffiyeh.
 		{%endblock%}
 	</div>
-	<div class="footer container">
+</div>
+	
+	<div id="footer" class="footer container">
 		<div class="pull-left">&copy;2013 AtYourService</div>
 		<div class="pull-right"><a href="/humans.txt">Made</a> with &lt;3 by <a href="http://twitter.com/mattr555">@mattr555</a></div>
 		<div style="clear:both;">
-			<a href="https://github.com/mattr555/AtYourService" class="social-link"><i class="icon-github-sign icon-2x"></i></a>
-			<a href="http://twitter.com/mattr555" class="social-link"><i class="icon-twitter-sign icon-2x"></i></a>
+			<a href="https://github.com/mattr555/AtYourService" class="social-link"><i class="fa fa-github-square fa-2x"></i></a>
+			<a href="http://twitter.com/mattr555" class="social-link"><i class="fa fa-twitter-square fa-2x"></i></a>
 		</div>
 	</div>
 	<!-- scripts -->

@@ -62,31 +62,31 @@
 			</div>
 			{%endif%}
 
-			<form class="form-signin" _lpchecked="1" action="" method="post">
+			<form class="form-signin" action="" method="post">
 				{%csrf_token%}
 				<h2 class="form-signin-heading">Please sign up</h2>
 				<div class="form-group">
-					<input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="username" {% if form.username.value %}value="{{form.username.value}}"{% endif %}>
+					<input type="text" class="input-block-level form-control" placeholder="Username" name="username" {% if form.username.value %}value="{{form.username.value}}"{% endif %} required>
 					<span class="help-block" id="username-help"></span>
 				</div>
 				<div class="form-group">
-					<input type="password" class="input-block-level form-control" placeholder="Password" name="password1">
+					<input type="password" class="input-block-level form-control" placeholder="Password" name="password1" required>
 					<span class="help-block"></span>
 				</div>
 				<div class="form-group">
-					<input type="password" class="input-block-level form-control" placeholder="Confirm password" name="password2">
+					<input type="password" class="input-block-level form-control" placeholder="Confirm password" name="password2" required>
 					<span class="help-block" id="password-help"></span>
 				</div>
 				<div class="form-group">
-					<input type="text" class="input-block-level form-control" placeholder="First name" name="first_name" {% if form.first_name.value %}value="{{form.first_name.value}}"{%endif%}>
+					<input type="text" class="input-block-level form-control" placeholder="First name" name="first_name" {% if form.first_name.value %}value="{{form.first_name.value}}"{%endif%} required>
 					<span class="help-block" id="password-help"></span>
 				</div>
 				<div class="form-group">
-					<input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name" {% if form.last_name.value %}value="{{form.last_name.value}}"{%endif%}>
+					<input type="text" class="input-block-level form-control" placeholder="Last name" name="last_name" {% if form.last_name.value %}value="{{form.last_name.value}}"{%endif%} required>
 					<span class="help-block" id="password-help"></span>
 				</div>
 				<div class="form-group">
-					<input type="text" class="input-block-level form-control" placeholder="Email" name="email" {% if form.email.value %}value="{{form.email.value}}"{%endif%}>
+					<input type="email" class="input-block-level form-control" placeholder="Email" name="email" {% if form.email.value %}value="{{form.email.value}}"{%endif%} required>
 					<span class="help-block" id="password-help"></span>
 				</div>
 				<div class="form-group">

@@ -27,23 +27,23 @@
 		</div>
 		<div class="form-group">
 			<label for="name-field">Name</label>
-			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name.value}}">
+			<input type="text" class="form-control" id="name-field" name="name" value="{{event.name.value}}" required>
 		</div>
 		<div class="form-group">
 			<label for="description-field">Description</label>
-			<textarea class="form-control" id="description-field" rows="3" name="description">{{event.description.value}}</textarea>
+			<textarea class="form-control" id="description-field" rows="3" name="description" required>{{event.description.value}}</textarea>
 		</div>
 		<div class="form-group">
 			<label for="date-start-field">Start date/time</label>
-			<input type="text" class="form-control" id="date-start-field" name="date_start" value="{{event.date_start.value}}" placeholder="MM/DD/YY HH:MM AM/PM">
+			<input type="text" class="form-control" id="date-start-field" name="date_start" value="{{event.date_start.value}}" placeholder="MM/DD/YY HH:MM AM/PM" required>
 		</div>
 		<div class="form-group">
 			<label for="date-end-field">End date/time</label>
-			<input type="text" class="form-control" id="date-end-field" name="date_end" value="{{event.date_end.value}}" placeholder="MM/DD/YY HH:MM AM/PM">
+			<input type="text" class="form-control" id="date-end-field" name="date_end" value="{{event.date_end.value}}" placeholder="MM/DD/YY HH:MM AM/PM" required>
 		</div>
 		<div class="form-group">
 			<label for="location-field">Location</label>
-			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location.value}}">
+			<input type="text" class="form-control" id="location-field" name="location" value="{{event.location.value}}" required>
 		</div>
 		<input type="hidden" id="lat-field" name="geo_lat" value="{{event.geo_lat.value}}">
 		<input type="hidden" id="lon-field" name="geo_lon" value="{{event.geo_lon.value}}">
