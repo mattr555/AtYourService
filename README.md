@@ -18,6 +18,7 @@ dev_settings.py/prod_settings.py
 * `DEFAULT_FROM_EMAIL`
 * `LOGGING`
 * `CACHES`
+* `ALLOWED_HOSTS`
 
 personal_settings.py
 --------------------

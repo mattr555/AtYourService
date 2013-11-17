@@ -4,7 +4,7 @@
 {%block title%}Track Events{%endblock%}
 
 {%block content%}
-<h2>Events participated by {{request.user.get_full_name}}</h2>
+<h2>Events participated in by {{request.user.get_full_name}}</h2>
 
 <a id='new-event-button' class='btn btn-success pull-right' href='#newEvent' data-toggle='modal' data-target='#newEvent' role='button'><i class="fa fa-plus"></i> Create New Event</a>
 <div id='newEvent' class="modal fade">
