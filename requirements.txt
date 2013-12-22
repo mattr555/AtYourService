@@ -1,7 +1,7 @@
-Django==1.6
+Django
 South
-django-ajax
 pytz
 geopy
 python3-memcached
 psycopg2
+decorator

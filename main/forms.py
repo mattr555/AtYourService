@@ -81,8 +81,8 @@ class EventCreate(forms.ModelForm):
 
     def save(self, commit=True):
         event = super(EventCreate, self).save(commit=False)
-        event.user = self._user
-        event.organizer_id = self.cleaned_data.get('organization').id
+        event.organizer = self._user
+        event.organization_id = self.cleaned_data.get('organization').id
         if commit:
             event.save()
         return event

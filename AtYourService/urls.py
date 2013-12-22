@@ -16,7 +16,6 @@ urlpatterns = patterns('',
     url(r'^real_admin/', include(admin.site.urls)),
     url(r'^admin/', TemplateView.as_view(template_name='admin.html')),
     url(r'^humans\.txt$', TemplateView.as_view(template_name='humans.txt', content_type='text/plain')),
-    url(r'^ajax/', include('ajax.urls')),
 
     url(r'^profile/reset_pass/$',
         'django.contrib.auth.views.password_reset',

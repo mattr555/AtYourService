@@ -95,7 +95,7 @@ def event_new(request):
         if form.is_valid():
             e = form.save()
             messages.success(request, 'Event created successfully')
-            return HttpResponseRedirect(reverse('main:event_home', args=(e.id)))
+            return HttpResponseRedirect(reverse('main:event_home', args=(str(e.id))))
         else:
             return render(request, 'main/event_new.html', {'errors': form.errors, 'event': form})
 

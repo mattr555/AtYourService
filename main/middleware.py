@@ -3,6 +3,7 @@ import pytz
 
 class TimezoneMiddleware:
     def process_request(self, request):
+        """
         tz = request.session.get('django_timezone')
         if tz:
             timezone.activate(tz)
@@ -13,3 +14,5 @@ class TimezoneMiddleware:
                 timezone.activate(tz)
         else:
             timezone.deactivate()
+        """
+        pass
