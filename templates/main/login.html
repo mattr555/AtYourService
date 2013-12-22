@@ -58,13 +58,14 @@
 			</div>
 			{%endif%}
 
-			<form class="form-signin" _lpchecked="1" action="" method="post">
+			<form class="form-signin" action="" method="post">
 				{%csrf_token%}
 				<h2 class="form-signin-heading">Please login</h2>
 				<input type="text" class="input-block-level form-control" placeholder="Username" style="background-image: none; background-position: 0% 0%; background-repeat: repeat repeat;" name="uname" id="uname">
 				<input type="password" class="input-block-level form-control" placeholder="Password" name="pword" id="pword">
+				<button class="btn btn-large btn-primary" type="submit">Login</button><br>
 				<a href="{%url 'reset_password'%}">Forgot password?</a><br>
-				<button class="btn btn-large btn-primary" type="submit">Login</button>
+				<a href="{%url 'main:signup'%}">Signup</a>
 			</form>
 
 		</div> <!-- /container -->

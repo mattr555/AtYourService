@@ -40,9 +40,9 @@
 					</ul>
 				</nav>
 				{%if request.user.id%}
-					<p class="pull-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
+					<p class="navbar-right navbar-text">Logged in as <a href="{% url 'main:user_profile'%}">{{request.user.username}}</a>. <a href="{%url 'main:logout'%}">Logout</a></p>
 				{%else%}
-					<p class="pull-right navbar-text">Not logged in. <a href="{%url 'main:login'%}?next={{request.get_full_path}}">Login</a> or <a href="{%url 'main:signup'%}">Signup</a></p>
+					<p class="navbar-right navbar-text">Not logged in. <a href="{%url 'main:login'%}?next={{request.get_full_path}}">Login</a> or <a href="{%url 'main:signup'%}">Signup</a></p>
 				{%endif%}
 			</div><!--/.nav-collapse -->
 		</div>
@@ -71,8 +71,11 @@
 </div>
 	
 	<div id="footer" class="footer container">
-		<div class="pull-left">&copy;2013 AtYourService</div>
-		<div class="pull-right"><a href="/humans.txt">Made</a> with &lt;3 by <a href="http://twitter.com/mattr555">@mattr555</a></div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">&copy;2013 AtYourService</div>
+			<div class="col-sm-6 hidden-xs" style="text-align:right"><a href="/humans.txt">Made</a> with &lt;3 by <a href="http://twitter.com/mattr555">@mattr555</a></div>
+			<div class="col-xs-12 visible-xs"><a href="/humans.txt">Made</a> with &lt;3 by <a href="http://twitter.com/mattr555">@mattr555</a></div>
+		</div>
 		<div style="clear:both;">
 			<a href="https://github.com/mattr555/AtYourService" class="social-link"><i class="fa fa-github-square fa-2x"></i></a>
 			<a href="http://twitter.com/mattr555" class="social-link"><i class="fa fa-twitter-square fa-2x"></i></a>
